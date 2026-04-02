@@ -8,7 +8,6 @@ import (
 	"go-server/pkg/jwt"
 	"go-server/pkg/log"
 	"strconv"
-	"strings"
 
 	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
@@ -36,11 +35,12 @@ func StrictAuth(j *jwt.JWT, logger *log.Logger) gin.HandlerFunc {
 			return
 		}
 
-		if !strings.HasPrefix(tokenString, "Bearer ") {
-			v1.Unauthorized(ctx, "Token 格式错误")
-			ctx.Abort()
-			return
-		}
+		// if !strings.HasPrefix(tokenString, "Bearer ") {
+		// 	v1.Unauthorized(ctx, "Token 格式错误")
+		// 	ctx.Abort()
+		// 	return
+		// }
+
 		claims, err := j.ParseToken(tokenString)
 		if err != nil {
 			logger.WithContext(ctx).Error("token error", zap.Any("data", map[string]interface{}{

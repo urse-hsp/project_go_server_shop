@@ -4,7 +4,24 @@ package model
 func GetModels() []interface{} {
 	return []interface{}{
 		&User{},
-		// &Order{},
-		// &Match{},
+		&UserCart{},
+		&Type{},
+		&Role{},
+		&report_1{},
+		&report_2{},
+		&report_3{},
+		&permission{},
+		&permissionApi{},
+		&orderGoods{},
+		&order{},
+		&Manager{},
+		&Goods{},
+		&GoodsPics{},
+		&GoodsCats{},
+		&goodsAttr{},
+		&Category{},
+		&Attribute{},
+		&Consignee{},
+		&Express{},
 	}
 }

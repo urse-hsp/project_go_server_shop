@@ -9,6 +9,7 @@ import (
 	"github.com/spf13/viper"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
+	"gorm.io/gorm/schema"
 )
 
 // 事物接口。将数据库事务的执行逻辑抽象化
@@ -56,6 +57,10 @@ func NewDB(conf *viper.Viper, l *log.Logger) *gorm.DB {
 	case "mysql":
 		db, err = gorm.Open(mysql.Open(dsn), &gorm.Config{
 			Logger: logger,
+			NamingStrategy: schema.NamingStrategy{
+				TablePrefix:   "sp_", //  前缀
+				SingularTable: true,  // 单数表名（false 为复数）【控制表名要不要自动加 s（变复数）】
+			},
 		})
 	// case "postgres":
 	// 	db, err = gorm.Open(postgres.New(postgres.Config{

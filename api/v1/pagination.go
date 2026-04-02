@@ -10,7 +10,7 @@ func GetPage(c *gin.Context) (page int, pageSize int) {
 	page = 1
 	pageSize = 10
 
-	if p := c.Query("page"); p != "" {
+	if p := c.Query("current"); p != "" {
 		if v, err := strconv.Atoi(p); err == nil && v > 0 {
 			page = v
 		}

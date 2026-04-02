@@ -1,4 +1,4 @@
-package userdto
+package userdto1
 
 import "go-server/internal/model"
 
@@ -9,7 +9,7 @@ func ToUserPublicDTO(u *model.User) UserPublicDTO {
 	return UserPublicDTO{
 		ID:       u.ID,
 		Username: u.Username,
-		// Avatar:   u.Avatar,
+		Avatar:   u.Avatar,
 	}
 }
 
@@ -18,7 +18,7 @@ func ToUserPrivateDTO(u *model.User) UserPrivateDTO {
 	return UserPrivateDTO{
 		ID:       u.ID,
 		Username: u.Username,
-		// Avatar:   u.Avatar,
+		Avatar:   u.Avatar,
 	}
 }
 

@@ -1,1 +1,1 @@
-ALTER TABLE users DROP COLUMN avatars;
+-- ALTER TABLE users DROP COLUMN avatars;
