@@ -24,17 +24,6 @@ type RouterDeps struct {
 func SetupRouter(deps RouterDeps) *gin.Engine {
 	r := gin.Default()
 
-	r.GET("/", func(c *gin.Context) {
-		c.String(200, "ok")
-	})
-
-	// 静态资源
-	r.Static("/web", "./web/dist")
-	// SPA 兜底。解决前端路由刷新/直达访问 404
-	r.NoRoute(func(c *gin.Context) {
-		c.File("./web/dist/index.html")
-	})
-
 	// 全局中间件
 	r.Use(
 		middleware.CORSMiddleware(),
@@ -42,13 +31,42 @@ func SetupRouter(deps RouterDeps) *gin.Engine {
 		middleware.ResponseLogMiddleware(deps.Logger), // 依赖注入日志组件
 	)
 
-	api := r.Group("/api/private/v1")
+	// // 静态资源
+	// r.Static("/web", "./web/dist")
+	// // SPA 兜底。解决前端路由刷新/直达访问 404
+	// r.NoRoute(func(c *gin.Context) {
+	// 	c.File("./web/dist/index.html")
+	// })
 
-	// ================= 用户模块 =================
-	// InitUserRouter(deps, api)
+	r.GET("/", func(c *gin.Context) {
+		c.String(200, "ok")
+	})
+
+	r.Static("/storage/uploads", "./storage/uploads")
+
+	v1 := r.Group("/api/private/v1")
 
 	// ================= 管理员模块 =================
-	InitManagerRouter(deps, api)
+	InitManagerRouter(deps, v1)
+	// ================= 角色模块 =================
+	InitRoleRouter(deps, v1)
+
+	// ================= 权限模块 =================
+	InitRightsRouter(deps, v1)
+
+	// ================= 商品模块 =================
+	InitGoodsRouter(deps, v1)
+
+	// ================= 类别模块 =================
+	categoryR := InitCategoryRouter(deps, v1)
+
+	// ================= 分类参数模块 =================
+	InitGoodsAttrRouter(deps, categoryR)
+
+	// ================= 订单模块 =================
+	InitOrderRouter(deps, v1)
+
+	InitUploadRouter(deps, v1)
 
 	return r
 }

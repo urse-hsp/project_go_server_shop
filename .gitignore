@@ -37,6 +37,7 @@ Thumbs.db
 .env
 *.log
 logs/
+uploads/
 
 # --- 测试与临时文件 ---
 coverage.out

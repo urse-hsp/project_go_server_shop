@@ -2,7 +2,7 @@ package model
 
 // 权限表
 
-type permission struct {
+type Permission struct {
 	ID         uint   `gorm:"primaryKey;autoIncrement;comment:主键"`
 	PsName     string `gorm:"type:varchar(20);not null;comment:权限名称"`
 	PsPid      uint   `gorm:"not null;comment:父id"`

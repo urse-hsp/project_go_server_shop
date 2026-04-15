@@ -1,6 +1,6 @@
 package model
 
-//
+// 角色
 
 type Role struct {
 	RoleID     uint   `gorm:"primaryKey;autoIncrement;comment:主键"`

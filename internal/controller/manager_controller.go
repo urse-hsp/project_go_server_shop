@@ -8,24 +8,17 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-type ManagerController interface {
-	Login(ctx *gin.Context)
-	GetManagerLists(ctx *gin.Context)
-	// Create(ctx *gin.Context)
-	// DeleteManager(ctx *gin.Context)
-	// GetManagerInfo(ctx *gin.Context)
-	// UpdateManager(ctx *gin.Context)
-}
-
 type managerController struct {
 	managerService service.ManagerService // 依赖注入
 }
 
-func NewManagerController(s service.ManagerService) ManagerController {
+func NewManagerController(s service.ManagerService) *managerController {
 	return &managerController{
 		managerService: s,
 	}
 }
+
+// ================= 登录 =================
 
 // @Summary 管理员登录
 // @Tags 管理员
@@ -57,11 +50,121 @@ func (c *managerController) Login(ctx *gin.Context) {
 	})
 }
 
-func (c *managerController) GetManagerLists(ctx *gin.Context) {
+// ================= 注册 =================
 
-	page, pageSize := v1.GetPage(ctx)
+// @Summary 管理员创建
+// @Tags 管理员
+// @Accept json
+// @Produce json
+// @Param data body managerdto.CreateRequest true "创建参数"
+// @Success 201 {string} string "No Content"
+// @Router /api/private/v1/users [post]
+func (u *managerController) Create(c *gin.Context) {
+	var req managerdto.CreateRequest
 
-	users, total, err := c.managerService.GetManagerLists(ctx, page, pageSize)
+	if err := c.ShouldBindJSON(&req); err != nil {
+		v1.BadRequest(c, "请求参数错误")
+		return
+	}
+
+	_, err := u.managerService.Create(c, req)
+	if err != nil {
+		v1.BadRequest(c, err.Error())
+		return
+	}
+
+	v1.Created(c, true)
+}
+
+// ================= 删除用户 =================
+
+// @Summary 删除用户
+// @Tags 管理员
+// @Produce json
+// @Param id path int true "用户ID"
+// @Success 200 {string} string "No Content"
+// @Router /api/private/v1/users/:id [delete]
+func (u *managerController) Delete(c *gin.Context) {
+	id, ok := GetUintID(c, "id")
+	if !ok {
+		return
+	}
+
+	// currentUserID := GetUserIdFromCtx(c)
+	// // 只允许删除自己（可扩展管理员）
+	// if currentUserID != uint(id) {
+	// 	v1.Forbidden(c, "无权限删除他人")
+	// 	return
+	// }
+	if err := u.managerService.Delete(c, uint(id)); err != nil {
+		v1.BadRequest(c, err.Error())
+		return
+	}
+
+	v1.Success(c, true)
+}
+
+// ================= 更新当前用户 =================
+
+// @Summary 更新当前用户
+// @Tags 管理员
+// @Accept json
+// @Produce json
+// @Param data body managerdto.UpdateRequest true "更新参数"
+// @Success 200 {object} string "No Content"
+// @Router /api/private/v1/users [put]
+func (u *managerController) Update(c *gin.Context) {
+	id, idErr := ParseUintParam(c, "id")
+	if idErr != nil {
+		v1.BadRequest(c, idErr.Error())
+		return
+	}
+
+	var req managerdto.UpdateRequest
+	if err := c.ShouldBindJSON(&req); err != nil {
+		v1.BadRequest(c, "请求参数错误"+err.Error())
+		return
+	}
+	if req.Email == nil && req.Mobile == nil && req.State == nil {
+		v1.BadRequest(c, "至少需要传一个更新字段")
+		return
+	}
+	// if req.Email != nil && *req.Email == "" {
+	// 	v1.BadRequest(c, "email不能为空")
+	// 	return
+	// }
+
+	// if req.Mobile != nil && *req.Mobile == "" {
+	// 	v1.BadRequest(c, "mobile不能为空")
+	// 	return
+	// }
+
+	_, err := u.managerService.Update(c, id, req)
+	if err != nil {
+		v1.BadRequest(c, err.Error())
+		return
+	}
+
+	v1.Success(c, true)
+}
+
+// ================= 分页列表  =================
+
+// @Summary 管理员列表
+// @Tags 管理员
+// @Produce json
+// @Param data query managerdto.ManagerQuery false "查询参数"
+// @Success 200 {object} v1.PageResponse
+// @Router /api/private/v1/users [get]
+func (c *managerController) GetLists(ctx *gin.Context) {
+	var q managerdto.ManagerQuery
+	if err := ctx.ShouldBindQuery(&q); err != nil {
+		v1.BadRequest(ctx, "参数错误")
+		return
+	}
+	q.Normalize()
+
+	users, total, err := c.managerService.GetLists(ctx, q)
 	if err != nil {
 		v1.BadRequest(ctx, err.Error())
 		return
@@ -69,5 +172,5 @@ func (c *managerController) GetManagerLists(ctx *gin.Context) {
 
 	list := managerdto.ManagerListToPublic(users)
 
-	v1.List(ctx, list, int(total), page, pageSize)
+	v1.List(ctx, list, int(total), q.Page, q.PageSize)
 }

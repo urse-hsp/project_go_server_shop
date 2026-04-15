@@ -1,11 +1,31 @@
 package managerdto
 
+import v1 "go-server/api/v1"
+
 // ================= 请求 DTO =================
 
-// 登录 / 注册
+// 登录
 type LoginRequest struct {
 	Username string `json:"username" binding:"required"`
 	Password string `json:"password" binding:"required"`
+}
+
+// 注册
+type CreateRequest struct {
+	LoginRequest
+	Email  string `json:"email" binding:"required"`
+	Mobile string `json:"mobile" binding:"required"`
+}
+
+type UpdateRequest struct {
+	Email  *string `json:"email"`
+	Mobile *string `json:"mobile"`
+	State  *bool   `json:"state"`
+}
+
+type ManagerQuery struct {
+	Query *string `form:"query"`
+	v1.PageRequest
 }
 
 // ================= 响应 DTO =================

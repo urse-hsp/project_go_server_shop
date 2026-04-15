@@ -2,7 +2,7 @@ package model
 
 // 商品-属性关联表
 
-type goodsAttr struct {
+type GoodsAttr struct {
 	ID        uint    `gorm:"primaryKey;autoIncrement;comment:主键"`
 	GoodsId   uint    `gorm:"not null;comment:商品id"`
 	AttrId    uint    `gorm:"not null;comment:属性id"`

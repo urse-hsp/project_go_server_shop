@@ -1,7 +1,12 @@
 // 通用dao
 package dao
 
-import "gorm.io/gorm"
+import (
+	"fmt"
+	goodsdto "go-server/internal/dto/goods"
+
+	"gorm.io/gorm"
+)
 
 // 通用分页 page从1开始
 func Paginate(db *gorm.DB, out interface{}, page, pageSize int) (int64, error) {
@@ -18,4 +23,19 @@ func Paginate(db *gorm.DB, out interface{}, page, pageSize int) (int64, error) {
 		Find(out).Error
 
 	return total, err
+}
+
+func ApplySort(db *gorm.DB, field string, sort *goodsdto.Sort) *gorm.DB {
+	order := "DESC"
+
+	if sort != nil {
+		switch *sort {
+		case goodsdto.SortAsc:
+			order = "ASC"
+		case goodsdto.SortDesc:
+			order = "DESC"
+		}
+	}
+
+	return db.Order(fmt.Sprintf("%s %s", field, order))
 }
