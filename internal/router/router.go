@@ -24,6 +24,13 @@ type RouterDeps struct {
 func SetupRouter(deps RouterDeps) *gin.Engine {
 	r := gin.Default()
 
+	// 静态资源
+	r.Static("/web", "./web/dist")
+	// SPA 兜底。解决前端路由刷新/直达访问 404
+	r.NoRoute(func(c *gin.Context) {
+		c.File("./web/dist/index.html")
+	})
+
 	// 全局中间件
 	r.Use(
 		middleware.CORSMiddleware(),
@@ -31,18 +38,11 @@ func SetupRouter(deps RouterDeps) *gin.Engine {
 		middleware.ResponseLogMiddleware(deps.Logger), // 依赖注入日志组件
 	)
 
-	// // 静态资源
-	// r.Static("/web", "./web/dist")
-	// // SPA 兜底。解决前端路由刷新/直达访问 404
-	// r.NoRoute(func(c *gin.Context) {
-	// 	c.File("./web/dist/index.html")
-	// })
-
 	r.GET("/", func(c *gin.Context) {
 		c.String(200, "ok")
 	})
 
-	r.Static("/storage/uploads", "./storage/uploads")
+	r.Static("/storage/uploads", "./storage/uploads") // 模拟上传图片。托管到服务中
 
 	v1 := r.Group("/api/private/v1")
 
