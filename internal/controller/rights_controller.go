@@ -21,11 +21,11 @@ type rightsController struct {
 }
 
 // ================= 列表 =================
-// @Summary 角色列表
-// @Tags 角色
+// @Summary 权限列表
+// @Tags 权限
 // @Produce json
-// @Success 200 {object} []roledto.RolePublicDTO
-// @Router /api/private/v1/roles [get]
+// @Success 200 {string} string "No Content"
+// @Router /api/private/v1/rights [get]
 func (u *rightsController) GetList(c *gin.Context) {
 	users, err := u.rightsService.GetList(c)
 	if err != nil {

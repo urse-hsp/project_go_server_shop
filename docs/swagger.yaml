@@ -1,60 +1,587 @@
 basePath: /
 definitions:
-  userdto.LoginRequest:
+  attributedto.CreateRequest:
+    properties:
+      attr_name:
+        description: 属性名称
+        type: string
+      attr_sel:
+        allOf:
+        - $ref: '#/definitions/model.AttrSel'
+        description: 属性录入方式
+    required:
+    - attr_name
+    - attr_sel
+    type: object
+  attributedto.PublicDTO:
+    properties:
+      attr_id:
+        description: 属性id
+        type: integer
+      attr_name:
+        description: 属性名称
+        type: string
+      attr_sel:
+        allOf:
+        - $ref: '#/definitions/model.AttrSel'
+        description: 属性录入方式
+      attr_vals:
+        description: 可选值
+        type: string
+      attr_write:
+        allOf:
+        - $ref: '#/definitions/model.AttrWrite'
+        description: 属性录入方式
+      cat_id:
+        description: 分类id
+        type: integer
+    type: object
+  attributedto.UpdateRequest:
+    properties:
+      attr_name:
+        description: 属性名称
+        type: string
+      attr_sel:
+        allOf:
+        - $ref: '#/definitions/model.AttrSel'
+        description: 属性录入方式
+      attr_vals:
+        type: string
+    required:
+    - attr_name
+    - attr_sel
+    type: object
+  category.CategoryType:
+    enum:
+    - "1"
+    - "2"
+    - "3"
+    type: string
+    x-enum-varnames:
+    - CategoryTypeLevel1
+    - CategoryTypeLevel2
+    - CategoryTypeLevel3
+  category.CreateRequest:
+    properties:
+      cat_level:
+        description: 分类层级
+        type: integer
+      cat_name:
+        description: 分类名称
+        type: string
+      cat_pid:
+        description: 父ID
+        type: integer
+    required:
+    - cat_name
+    type: object
+  category.PrivateDTO:
+    type: object
+  category.PublicDTO:
+    properties:
+      cat_deleted:
+        description: 是否删除
+        type: boolean
+      cat_id:
+        description: 分类ID
+        type: integer
+      cat_level:
+        description: 分类层级
+        type: integer
+      cat_name:
+        description: 分类名称
+        type: string
+      cat_pid:
+        description: 父ID
+        type: integer
+      children:
+        description: omitempty：如果字段是“空值”，就不返回
+        items:
+          $ref: '#/definitions/category.PublicDTO'
+        type: array
+    type: object
+  category.UpdateRequest:
+    properties:
+      cat_name:
+        description: 分类名称
+        type: string
+    type: object
+  goodsdto.AttrDTO:
+    properties:
+      add_price:
+        description: 该属性需要额外增加的价钱
+        type: number
+      attr_id:
+        description: 属性id
+        type: integer
+      attr_value:
+        description: 商品对应属性的值
+        type: string
+      goods_id:
+        description: 商品id
+        type: integer
+      id:
+        description: 主键
+        type: integer
+    type: object
+  goodsdto.CreateAttr:
+    properties:
+      attr_id:
+        type: integer
+      attr_value:
+        type: string
+    required:
+    - attr_id
+    - attr_value
+    type: object
+  goodsdto.CreatePics:
+    properties:
+      pic:
+        type: string
+      url:
+        type: string
+    required:
+    - pic
+    - url
+    type: object
+  goodsdto.CreateRequest:
+    properties:
+      attrs:
+        description: 商品属性
+        items:
+          $ref: '#/definitions/goodsdto.CreateAttr'
+        type: array
+      goods_cat:
+        description: 商品分类
+        type: string
+      goods_introduce:
+        description: 商品介绍
+        type: string
+      goods_name:
+        description: gorm.Model
+        type: string
+      goods_number:
+        description: 商品数量
+        type: integer
+      goods_price:
+        description: 商品价格
+        type: number
+      goods_weight:
+        description: 商品重量
+        type: integer
+      pics:
+        description: 商品图片
+        items:
+          $ref: '#/definitions/goodsdto.CreatePics'
+        type: array
+    required:
+    - attrs
+    - goods_cat
+    - goods_introduce
+    - goods_name
+    - goods_number
+    - goods_price
+    - goods_weight
+    - pics
+    type: object
+  goodsdto.DetailPublicDTO:
+    properties:
+      add_time:
+        description: 添加时间s
+        type: integer
+      attrs:
+        description: 商品属性
+        items:
+          $ref: '#/definitions/goodsdto.AttrDTO'
+        type: array
+      cat_id:
+        description: 商品分类
+        type: integer
+      cat_one_id:
+        description: 商品分类
+        type: integer
+      cat_three_id:
+        description: 商品分类
+        type: integer
+      cat_two_id:
+        description: 商品分类
+        type: integer
+      goods_big_logo:
+        description: 商品大图
+        type: string
+      goods_cat:
+        description: 商品分类
+        type: string
+      goods_id:
+        description: 主键
+        type: integer
+      goods_introduce:
+        description: 商品介绍
+        type: string
+      goods_name:
+        description: 商品名称
+        type: string
+      goods_number:
+        description: 商品数量
+        type: integer
+      goods_price:
+        description: 商品价格
+        type: number
+      goods_small_logo:
+        description: 商品小图
+        type: string
+      goods_state:
+        description: 商品状态
+        type: integer
+      goods_weight:
+        description: 商品重量
+        type: integer
+      is_promote:
+        description: 是否促销
+        type: integer
+      pics:
+        description: 商品图片
+        items:
+          $ref: '#/definitions/goodsdto.PicDTO'
+        type: array
+      upd_time:
+        description: 更新时间
+        type: integer
+    type: object
+  goodsdto.PageResponse:
+    properties:
+      data:
+        description: 列表
+        items:
+          $ref: '#/definitions/goodsdto.PublicDTO'
+        type: array
+      page:
+        description: 页码
+        type: integer
+      pageSize:
+        description: 条数
+        type: integer
+      total:
+        description: 总数
+        type: integer
+    type: object
+  goodsdto.PicDTO:
+    properties:
+      goods_id:
+        description: 商品id
+        type: integer
+      pics_big_url:
+        description: 相册大图
+        type: string
+      pics_id:
+        description: 主键
+        type: integer
+      pics_mid_url:
+        description: 相册中图
+        type: string
+      pics_sma_url:
+        description: 相册小图s
+        type: string
+    type: object
+  goodsdto.PublicDTO:
+    properties:
+      add_time:
+        description: 添加时间s
+        type: integer
+      goods_id:
+        description: 主键
+        type: integer
+      goods_name:
+        description: 商品名称
+        type: string
+      goods_number:
+        description: 商品数量
+        type: integer
+      goods_price:
+        description: 商品价格
+        type: number
+      goods_state:
+        description: 商品状态
+        type: integer
+      goods_weight:
+        description: 商品重量
+        type: integer
+      is_promote:
+        description: 是否促销
+        type: integer
+    type: object
+  goodsdto.Sort:
+    enum:
+    - asc
+    - desc
+    type: string
+    x-enum-varnames:
+    - SortAsc
+    - SortDesc
+  goodsdto.UpdateRequest:
+    properties:
+      attrs:
+        description: 商品属性
+        items:
+          $ref: '#/definitions/goodsdto.CreateAttr'
+        type: array
+      goods_cat:
+        description: 商品分类
+        type: string
+      goods_introduce:
+        description: 商品介绍
+        type: string
+      goods_name:
+        description: gorm.Model
+        type: string
+      goods_number:
+        description: 商品数量
+        type: integer
+      goods_price:
+        description: 商品价格
+        type: number
+      goods_weight:
+        description: 商品重量
+        type: integer
+      pics:
+        description: 商品图片
+        items:
+          $ref: '#/definitions/goodsdto.CreatePics'
+        type: array
+    required:
+    - attrs
+    - goods_cat
+    - goods_introduce
+    - goods_name
+    - goods_number
+    - goods_price
+    - goods_weight
+    - pics
+    type: object
+  managerdto.CreateRequest:
+    properties:
+      email:
+        description: 邮箱
+        type: string
+      mobile:
+        description: 手机号
+        type: string
+      password:
+        type: string
+      username:
+        description: 用户名
+        type: string
+    required:
+    - email
+    - mobile
+    - password
+    - username
+    type: object
+  managerdto.LoginRequest:
     properties:
       password:
         type: string
       username:
+        description: 用户名
         type: string
     required:
     - password
     - username
     type: object
-  userdto.LoginResponse:
+  managerdto.LoginResponse:
     properties:
+      email:
+        description: 邮箱
+        type: string
+      id:
+        description: ID
+        type: integer
+      mg_state:
+        description: 状态
+        type: boolean
+      mobile:
+        description: 手机号
+        type: string
+      role_id:
+        description: 角色id
+        type: integer
+      role_name:
+        description: 角色
+        type: string
       token:
         type: string
-      user:
-        $ref: '#/definitions/userdto.UserPrivateDTO'
-    type: object
-  userdto.UserPrivateDTO:
-    properties:
-      avatar:
-        type: string
-      email:
-        type: string
-      id:
-        type: integer
-      phone:
-        type: string
       username:
+        description: 用户名
         type: string
     type: object
-  userdto.UserPublicDTO:
+  managerdto.ManagerPublicDTO:
     properties:
-      avatar:
-        type: string
       id:
+        description: ID
         type: integer
       username:
+        description: 用户名
         type: string
     type: object
-  userdto.UserUpdateRequest:
+  managerdto.PageResponse:
     properties:
-      avatar:
-        type: string
-      username:
-        type: string
-    type: object
-  v1.PageResponse:
-    properties:
-      data: {}
+      data:
+        description: 列表
+        items:
+          $ref: '#/definitions/managerdto.ManagerPublicDTO'
+        type: array
       page:
+        description: 页码
         type: integer
       pageSize:
+        description: 条数
         type: integer
       total:
+        description: 总数
         type: integer
+    type: object
+  managerdto.UpdateRequest:
+    properties:
+      email:
+        description: 邮箱
+        type: string
+      mobile:
+        description: 手机号
+        type: string
+      state:
+        description: 状态
+        type: boolean
+    type: object
+  model.AttrSel:
+    enum:
+    - only
+    - many
+    type: string
+    x-enum-varnames:
+    - AttrSelOnly
+    - AttrSelMany
+  model.AttrWrite:
+    enum:
+    - manual
+    - list
+    type: string
+    x-enum-varnames:
+    - AttrWriteManual
+    - AttrWriteList
+  model.IsSend:
+    enum:
+    - 是
+    - 否
+    type: string
+    x-enum-varnames:
+    - IsSendYes
+    - IsSendNo
+  model.OrderPay:
+    enum:
+    - "0"
+    - "1"
+    - "2"
+    - "3"
+    type: string
+    x-enum-varnames:
+    - OrderPayUnpaid
+    - OrderPayAlipay
+    - OrderPayWechat
+    - OrderPayBankCard
+  model.PayStatus:
+    enum:
+    - "0"
+    - "1"
+    type: string
+    x-enum-varnames:
+    - PayStatusUnpaid
+    - PayStatusPaid
+  orderdto.PageResponse:
+    properties:
+      data:
+        description: 列表
+        items:
+          $ref: '#/definitions/orderdto.PublicDTO'
+        type: array
+      page:
+        description: 页码
+        type: integer
+      pageSize:
+        description: 条数
+        type: integer
+      total:
+        description: 总数
+        type: integer
+    type: object
+  orderdto.PublicDTO:
+    properties:
+      consignee_addr:
+        description: 收货地址
+        type: string
+      create_time:
+        description: 创建时间
+        type: integer
+      is_send:
+        allOf:
+        - $ref: '#/definitions/model.IsSend'
+        description: 是否发货
+      order_fapiao_company:
+        description: 发票公司
+        type: string
+      order_fapiao_content:
+        description: 发票内容
+        type: string
+      order_fapiao_title:
+        description: 发票抬头
+        type: string
+      order_id:
+        description: 订单id
+        type: integer
+      order_number:
+        description: 订单号
+        type: string
+      order_pay:
+        allOf:
+        - $ref: '#/definitions/model.OrderPay'
+        description: 支付方式
+      order_price:
+        description: 订单价格
+        type: number
+      pay_status:
+        allOf:
+        - $ref: '#/definitions/model.PayStatus'
+        description: 支付状态
+      trade_no:
+        description: 交易号
+        type: string
+      update_time:
+        description: 更新时间
+        type: integer
+      user_id:
+        description: 用户id
+        type: integer
+    type: object
+  roledto.LoginRequest:
+    properties:
+      roleDesc:
+        type: string
+      roleName:
+        type: string
+    required:
+    - roleDesc
+    - roleName
+    type: object
+  roledto.RolePublicDTO:
+    properties:
+      id:
+        description: 角色ID
+        type: integer
+      roleDesc:
+        description: 角色描述
+        type: string
+      roleName:
+        description: 角色名称
+        type: string
     type: object
 host: localhost:8080
 info:
@@ -63,7 +590,367 @@ info:
   title: go-server API
   version: "1.0"
 paths:
-  /user/{id}:
+  /api/private/v1/:id/attributes:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: 注册参数
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/attributedto.CreateRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/attributedto.PublicDTO'
+      summary: 分类参数创建
+      tags:
+      - 分类属性
+    put:
+      consumes:
+      - application/json
+      parameters:
+      - description: 更新参数
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/attributedto.UpdateRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: No Content
+          schema:
+            type: string
+      summary: 分类参数更新
+      tags:
+      - 分类属性
+  /api/private/v1/categories:
+    get:
+      parameters:
+      - in: query
+        name: current
+        type: integer
+      - in: query
+        name: pageSize
+        type: integer
+      - in: query
+        name: query
+        type: string
+      - enum:
+        - "1"
+        - "2"
+        - "3"
+        in: query
+        name: type
+        type: string
+        x-enum-varnames:
+        - CategoryTypeLevel1
+        - CategoryTypeLevel2
+        - CategoryTypeLevel3
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/category.PublicDTO'
+            type: array
+      summary: 商品分类列表
+      tags:
+      - 商品分类
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: 注册参数
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/category.CreateRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/category.PrivateDTO'
+      summary: 商品分类创建
+      tags:
+      - 商品分类
+    put:
+      consumes:
+      - application/json
+      parameters:
+      - description: 更新参数
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/category.UpdateRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/category.PrivateDTO'
+      summary: 商品分类更新
+      tags:
+      - 商品分类
+  /api/private/v1/categories/{id}:
+    delete:
+      parameters:
+      - description: ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: No Content
+          schema:
+            type: string
+      summary: 商品分类删除
+      tags:
+      - 商品分类
+  /api/private/v1/goods:
+    get:
+      parameters:
+      - in: query
+        minimum: 1
+        name: page
+        required: true
+        type: integer
+      - in: query
+        maximum: 100
+        minimum: 1
+        name: pageSize
+        required: true
+        type: integer
+      - description: 搜索
+        in: query
+        name: query
+        type: string
+      - description: 排序
+        enum:
+        - asc
+        - desc
+        in: query
+        name: sort
+        type: string
+        x-enum-varnames:
+        - SortAsc
+        - SortDesc
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/goodsdto.PageResponse'
+      summary: 列表 分页
+      tags:
+      - 商品
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: 注册参数
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/goodsdto.CreateRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/goodsdto.DetailPublicDTO'
+      summary: 注册
+      tags:
+      - 商品
+  /api/private/v1/goods/{id}:
+    delete:
+      parameters:
+      - description: ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: No Content
+          schema:
+            type: string
+      summary: 删除
+      tags:
+      - 商品
+    get:
+      parameters:
+      - description: ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/goodsdto.DetailPublicDTO'
+      summary: 获取详情
+      tags:
+      - 商品
+  /api/private/v1/goods/info:
+    put:
+      consumes:
+      - application/json
+      parameters:
+      - description: 更新参数
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/goodsdto.UpdateRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/goodsdto.DetailPublicDTO'
+      summary: 更新
+      tags:
+      - 商品
+  /api/private/v1/login:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: 登录参数
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/managerdto.LoginRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/managerdto.LoginResponse'
+      summary: 管理员登录
+      tags:
+      - 管理员
+  /api/private/v1/orders/{id}:
+    get:
+      parameters:
+      - description: ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/orderdto.PublicDTO'
+      summary: 获取详情
+      tags:
+      - 订单
+  /api/private/v1/orders/lists:
+    get:
+      parameters:
+      - in: query
+        minimum: 1
+        name: page
+        required: true
+        type: integer
+      - in: query
+        maximum: 100
+        minimum: 1
+        name: pageSize
+        required: true
+        type: integer
+      - in: query
+        name: query
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/orderdto.PageResponse'
+      summary: 订单列表-分页
+      tags:
+      - 订单
+  /api/private/v1/rights:
+    get:
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: No Content
+          schema:
+            type: string
+      summary: 权限列表
+      tags:
+      - 权限
+  /api/private/v1/roles:
+    get:
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/roledto.RolePublicDTO'
+            type: array
+      summary: 角色列表
+      tags:
+      - 角色
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: 创建参数
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/roledto.LoginRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/roledto.RolePublicDTO'
+      summary: 创建
+      tags:
+      - 角色
+  /api/private/v1/roles/{id}:
     delete:
       parameters:
       - description: 用户ID
@@ -78,21 +965,9 @@ paths:
           description: No Content
           schema:
             type: string
-      summary: 删除用户
+      summary: 删除
       tags:
-      - 用户
-  /user/info:
-    get:
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/userdto.UserPrivateDTO'
-      summary: 获取当前用户信息
-      tags:
-      - 用户
+      - 角色
     put:
       consumes:
       - application/json
@@ -102,76 +977,97 @@ paths:
         name: data
         required: true
         schema:
-          $ref: '#/definitions/userdto.UserUpdateRequest'
+          $ref: '#/definitions/roledto.LoginRequest'
       produces:
       - application/json
       responses:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/userdto.UserPrivateDTO'
+            $ref: '#/definitions/roledto.RolePublicDTO'
       summary: 更新当前用户
       tags:
-      - 用户
-  /user/login:
+      - 角色
+  /api/private/v1/upload:
     post:
       consumes:
       - application/json
-      description: 输入账号密码获取 token
+      produces:
+      - application/json
+      responses: {}
+      summary: 上传
+      tags:
+      - 上传
+  /api/private/v1/users:
+    get:
       parameters:
-      - description: 登录参数
+      - in: query
+        minimum: 1
+        name: page
+        required: true
+        type: integer
+      - in: query
+        maximum: 100
+        minimum: 1
+        name: pageSize
+        required: true
+        type: integer
+      - description: 搜索
+        in: query
+        name: query
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/managerdto.PageResponse'
+      summary: 管理员列表
+      tags:
+      - 管理员
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: 创建参数
         in: body
         name: data
         required: true
         schema:
-          $ref: '#/definitions/userdto.LoginRequest'
+          $ref: '#/definitions/managerdto.CreateRequest'
       produces:
       - application/json
       responses:
-        "200":
-          description: OK
+        "201":
+          description: No Content
           schema:
-            $ref: '#/definitions/userdto.LoginResponse'
-      summary: 用户登录
+            type: string
+      summary: 管理员创建
       tags:
-      - 用户
-  /user/register:
-    post:
+      - 管理员
+    put:
       consumes:
       - application/json
       parameters:
-      - description: 注册参数
+      - description: 更新参数
         in: body
         name: data
         required: true
         schema:
-          $ref: '#/definitions/userdto.LoginRequest'
+          $ref: '#/definitions/managerdto.UpdateRequest'
       produces:
       - application/json
       responses:
         "200":
-          description: OK
+          description: No Content
           schema:
-            $ref: '#/definitions/userdto.UserPrivateDTO'
-      summary: 用户注册
+            type: string
+      summary: 更新用户
       tags:
-      - 用户
-  /users:
-    get:
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            items:
-              $ref: '#/definitions/userdto.UserPublicDTO'
-            type: array
-      summary: 用户列表
-      tags:
-      - 用户
-  /users/{id}:
-    get:
+      - 管理员
+  /api/private/v1/users/{id}:
+    delete:
       parameters:
       - description: 用户ID
         in: path
@@ -182,22 +1078,53 @@ paths:
       - application/json
       responses:
         "200":
-          description: OK
+          description: No Content
           schema:
-            $ref: '#/definitions/userdto.UserPublicDTO'
-      summary: 获取用户详情
+            type: string
+      summary: 删除用户
       tags:
-      - 用户
-  /users/list:
+      - 管理员
+  /categories/:id/attributes:
     get:
+      parameters:
+      - description: 属性录入方式
+        enum:
+        - only
+        - many
+        in: query
+        name: sel
+        type: string
+        x-enum-varnames:
+        - AttrSelOnly
+        - AttrSelMany
       produces:
       - application/json
       responses:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/v1.PageResponse'
-      summary: 用户列表 分页
+            items:
+              $ref: '#/definitions/attributedto.PublicDTO'
+            type: array
+      summary: 分类参数列表
       tags:
-      - 用户
+      - 分类属性
+  /categories/:id/attributes/{id}:
+    delete:
+      parameters:
+      - description: ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: No Content
+          schema:
+            type: string
+      summary: 分类参数删除
+      tags:
+      - 分类属性
 swagger: "2.0"

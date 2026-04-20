@@ -25,12 +25,11 @@ type uploadController struct {
 
 // ================= 创建 =================
 
-// @Summary **创建
-// @Tags DEMO
+// @Summary 上传
+// @Tags 上传
 // @Accept json
 // @Produce json
-// @Router /upload [post]
-
+// @Router /api/private/v1/upload [post]
 func (u *uploadController) Upload(c *gin.Context) {
 	file, err := c.FormFile("file")
 	if err != nil {

@@ -15,17 +15,9 @@ func InitUploadRouter(deps RouterDeps, r *gin.RouterGroup) {
 	Controller := controller.NewUploadController(deps.Handler, Service) // controller
 
 	noAuthRouter := r.Group("/upload")
-	// ✅ 不需要登录
-	{
-	}
 	// ✅ 需要登录
 	strictAuthRouter := noAuthRouter.Group("").Use(middleware.StrictAuth(deps.JWT, deps.Logger))
 	{
 		strictAuthRouter.POST("", Controller.Upload) // create
 	}
-	// // ✅ 不强制登录
-	// noStrictAuth := noAuthRouter.Group("").Use(middleware.NoStrictAuth(deps.JWT, deps.Logger))
-	// {
-	// 	noStrictAuth.GET("/lists", Controller.GetPageList) // 分页列表
-	// }
 }

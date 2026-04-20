@@ -11,13 +11,13 @@ type PageRequest struct {
 	PageSize int `form:"pageSize" binding:"required,min=1,max=100"`
 }
 
-// type PageRequest2 struct {
-// 	*PageRequest
-// }
+type PageSizeResponse struct {
+	Total    int `json:"total"`    // 总数
+	Page     int `json:"page"`     // 页码
+	PageSize int `json:"pageSize"` // 条数
+}
 
-type PageResponse struct {
-	Data     any `json:"data"`
-	Total    int `json:"total"`
-	Page     int `json:"page"`
-	PageSize int `json:"pageSize"`
+type PageResponse[T any] struct {
+	Data []T `json:"data"` // 列表
+	PageSizeResponse
 }

@@ -23,13 +23,12 @@ type attributeController struct {
 // ================= 创建 =================
 
 // @Summary 分类参数创建
-// @Tags DEMO
+// @Tags 分类属性
 // @Accept json
 // @Produce json
 // @Param data body attributedto.CreateRequest true "注册参数"
-// @Success 201 {object} attributedto.UserPrivateDTO
-// @Router /demo [post]
-
+// @Success 201 {object} attributedto.PublicDTO
+// @Router /api/private/v1/:id/attributes [post]
 func (u *attributeController) Create(c *gin.Context) {
 	id, ok := GetId(c)
 	if !ok {
@@ -49,18 +48,17 @@ func (u *attributeController) Create(c *gin.Context) {
 		return
 	}
 
-	v1.Created(c, attributedto.ToPrivateDTO(user))
+	v1.Created(c, attributedto.ToPublicDTO(user))
 }
 
 // ================= 删除id信息 =================
 
 // @Summary 分类参数删除
-// @Tags DEMO
+// @Tags 分类属性
 // @Produce json
 // @Param id path int true "ID"
 // @Success 204 {string} string "No Content"
 // @Router /categories/:id/attributes/{id} [delete]
-
 func (u *attributeController) Delete(c *gin.Context) {
 	_, ok := GetId(c)
 	if !ok {
@@ -83,13 +81,12 @@ func (u *attributeController) Delete(c *gin.Context) {
 // ================= 更新当前id信息 =================
 
 // @Summary 分类参数更新
-// @Tags DEMO
+// @Tags 分类属性
 // @Accept json
 // @Produce json
 // @Param data body attributedto.UpdateRequest true "更新参数"
-// @Success 200 {object} attributedto.UserPrivateDTO
-// @Router /demo [put]
-
+// @Success 200 {string} string "No Content"
+// @Router /api/private/v1/:id/attributes [put]
 func (u *attributeController) Update(c *gin.Context) {
 	ids, oks := GetUintID(c, "attrId")
 	if !oks {
@@ -114,10 +111,10 @@ func (u *attributeController) Update(c *gin.Context) {
 // ================= 获取id详情 =================
 
 // @Summary 获取详情
-// @Tags DEMO
+// @Tags 分类属性
 // @Produce json
 // @Param id path int true "ID"
-// @Success 200 {object} attributedto.UserPublicDTO
+// @Success 200 {object} attributedto.ToPublicDTO
 // @Router /categories/:id/attributes/{id} [get]
 
 func (u *attributeController) GetDetail(c *gin.Context) {
@@ -126,31 +123,23 @@ func (u *attributeController) GetDetail(c *gin.Context) {
 		return
 	}
 
-	user, err := u.Service.GetDetail(c, uint(id))
+	data, err := u.Service.GetDetail(c, uint(id))
 	if err != nil {
 		v1.BadRequest(c, err.Error())
 		return
 	}
 
-	currentUserID := GetUserIdFromCtx(c)
-
-	// 权限控制：自己 vs 他人
-	if currentUserID == uint(id) {
-		v1.Success(c, attributedto.ToPrivateDTO(user))
-	} else {
-		v1.Success(c, attributedto.ToPublicDTO(user))
-	}
+	v1.Success(c, attributedto.ToPublicDTO(data))
 }
 
 // ================= 列表 =================
 
 // @Summary 分类参数列表
-// @Tags DEMO
+// @Tags 分类属性
 // @Produce json
 // @Param data query attributedto.RequestQuery false "查询参数"
-// @Success 200 {object} []attributedto.UserPublicDTO
-// @Router /user [get]
-
+// @Success 200 {object} []attributedto.PublicDTO
+// @Router /categories/:id/attributes [get]
 func (u *attributeController) GetList(c *gin.Context) {
 	id, ok := GetId(c)
 	if !ok {
@@ -173,39 +162,6 @@ func (u *attributeController) GetList(c *gin.Context) {
 	list := attributedto.ListToPublic(users)
 
 	v1.Success(c, list)
-}
-
-// ================= 分页列表 =================
-
-// @Summary 分类参数列表-分页
-// @Tags DEMO
-// @Produce json
-// @Param data query attributedto.RequestPageQuery false "查询参数"
-// @Success 200 {object} v1.PageResponse
-// @Router /categories/:id/attributes/lists [get]
-
-func (u *attributeController) GetPageList(c *gin.Context) {
-	id, ok := GetId(c)
-	if !ok {
-		return
-	}
-
-	var q attributedto.RequestPageQuery
-
-	if err := c.ShouldBindQuery(&q); err != nil {
-		v1.BadRequest(c, "参数错误")
-		return
-	}
-
-	users, total, err := u.Service.GetPageList(c, id, q)
-	if err != nil {
-		v1.BadRequest(c, err.Error())
-		return
-	}
-
-	list := attributedto.ListToPublic(users)
-
-	v1.List(c, list, int(total), q.Page, q.PageSize)
 }
 
 // 取模块参数id

@@ -9,20 +9,119 @@
     "host": "localhost:8080",
     "basePath": "/",
     "paths": {
-        "/user/info": {
+        "/api/private/v1/:id/attributes": {
+            "put": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "分类属性"
+                ],
+                "summary": "分类参数更新",
+                "parameters": [
+                    {
+                        "description": "更新参数",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/attributedto.UpdateRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "No Content",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "分类属性"
+                ],
+                "summary": "分类参数创建",
+                "parameters": [
+                    {
+                        "description": "注册参数",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/attributedto.CreateRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Created",
+                        "schema": {
+                            "$ref": "#/definitions/attributedto.PublicDTO"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/private/v1/categories": {
             "get": {
                 "produces": [
                     "application/json"
                 ],
                 "tags": [
-                    "用户"
+                    "商品分类"
                 ],
-                "summary": "获取当前用户信息",
+                "summary": "商品分类列表",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "name": "current",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "name": "pageSize",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "name": "query",
+                        "in": "query"
+                    },
+                    {
+                        "enum": [
+                            "1",
+                            "2",
+                            "3"
+                        ],
+                        "type": "string",
+                        "x-enum-varnames": [
+                            "CategoryTypeLevel1",
+                            "CategoryTypeLevel2",
+                            "CategoryTypeLevel3"
+                        ],
+                        "name": "type",
+                        "in": "query"
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/userdto.UserPrivateDTO"
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/category.PublicDTO"
+                            }
                         }
                     }
                 }
@@ -35,7 +134,447 @@
                     "application/json"
                 ],
                 "tags": [
-                    "用户"
+                    "商品分类"
+                ],
+                "summary": "商品分类更新",
+                "parameters": [
+                    {
+                        "description": "更新参数",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/category.UpdateRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/category.PrivateDTO"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "商品分类"
+                ],
+                "summary": "商品分类创建",
+                "parameters": [
+                    {
+                        "description": "注册参数",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/category.CreateRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Created",
+                        "schema": {
+                            "$ref": "#/definitions/category.PrivateDTO"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/private/v1/categories/{id}": {
+            "delete": {
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "商品分类"
+                ],
+                "summary": "商品分类删除",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "No Content",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/private/v1/goods": {
+            "get": {
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "商品"
+                ],
+                "summary": "列表 分页",
+                "parameters": [
+                    {
+                        "minimum": 1,
+                        "type": "integer",
+                        "name": "page",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "maximum": 100,
+                        "minimum": 1,
+                        "type": "integer",
+                        "name": "pageSize",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "搜索",
+                        "name": "query",
+                        "in": "query"
+                    },
+                    {
+                        "enum": [
+                            "asc",
+                            "desc"
+                        ],
+                        "type": "string",
+                        "x-enum-varnames": [
+                            "SortAsc",
+                            "SortDesc"
+                        ],
+                        "description": "排序",
+                        "name": "sort",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/goodsdto.PageResponse"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "商品"
+                ],
+                "summary": "注册",
+                "parameters": [
+                    {
+                        "description": "注册参数",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/goodsdto.CreateRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Created",
+                        "schema": {
+                            "$ref": "#/definitions/goodsdto.DetailPublicDTO"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/private/v1/goods/info": {
+            "put": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "商品"
+                ],
+                "summary": "更新",
+                "parameters": [
+                    {
+                        "description": "更新参数",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/goodsdto.UpdateRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/goodsdto.DetailPublicDTO"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/private/v1/goods/{id}": {
+            "get": {
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "商品"
+                ],
+                "summary": "获取详情",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/goodsdto.DetailPublicDTO"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "商品"
+                ],
+                "summary": "删除",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "No Content",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/private/v1/login": {
+            "post": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "管理员"
+                ],
+                "summary": "管理员登录",
+                "parameters": [
+                    {
+                        "description": "登录参数",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/managerdto.LoginRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/managerdto.LoginResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/private/v1/orders/lists": {
+            "get": {
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "订单"
+                ],
+                "summary": "订单列表-分页",
+                "parameters": [
+                    {
+                        "minimum": 1,
+                        "type": "integer",
+                        "name": "page",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "maximum": 100,
+                        "minimum": 1,
+                        "type": "integer",
+                        "name": "pageSize",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "name": "query",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/orderdto.PageResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/private/v1/orders/{id}": {
+            "get": {
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "订单"
+                ],
+                "summary": "获取详情",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/orderdto.PublicDTO"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/private/v1/rights": {
+            "get": {
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "权限"
+                ],
+                "summary": "权限列表",
+                "responses": {
+                    "200": {
+                        "description": "No Content",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/private/v1/roles": {
+            "get": {
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "角色"
+                ],
+                "summary": "角色列表",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/roledto.RolePublicDTO"
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "角色"
+                ],
+                "summary": "创建",
+                "parameters": [
+                    {
+                        "description": "创建参数",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/roledto.LoginRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Created",
+                        "schema": {
+                            "$ref": "#/definitions/roledto.RolePublicDTO"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/private/v1/roles/{id}": {
+            "put": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "角色"
                 ],
                 "summary": "更新当前用户",
                 "parameters": [
@@ -45,7 +584,7 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/userdto.UserUpdateRequest"
+                            "$ref": "#/definitions/roledto.LoginRequest"
                         }
                     }
                 ],
@@ -53,88 +592,19 @@
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/userdto.UserPrivateDTO"
+                            "$ref": "#/definitions/roledto.RolePublicDTO"
                         }
                     }
                 }
-            }
-        },
-        "/user/login": {
-            "post": {
-                "description": "输入账号密码获取 token",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "用户"
-                ],
-                "summary": "用户登录",
-                "parameters": [
-                    {
-                        "description": "登录参数",
-                        "name": "data",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/userdto.LoginRequest"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/userdto.LoginResponse"
-                        }
-                    }
-                }
-            }
-        },
-        "/user/register": {
-            "post": {
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "用户"
-                ],
-                "summary": "用户注册",
-                "parameters": [
-                    {
-                        "description": "注册参数",
-                        "name": "data",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/userdto.LoginRequest"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/userdto.UserPrivateDTO"
-                        }
-                    }
-                }
-            }
-        },
-        "/user/{id}": {
+            },
             "delete": {
                 "produces": [
                     "application/json"
                 ],
                 "tags": [
-                    "用户"
+                    "角色"
                 ],
-                "summary": "删除用户",
+                "summary": "删除",
                 "parameters": [
                     {
                         "type": "integer",
@@ -154,56 +624,134 @@
                 }
             }
         },
-        "/users": {
+        "/api/private/v1/upload": {
+            "post": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "上传"
+                ],
+                "summary": "上传",
+                "responses": {}
+            }
+        },
+        "/api/private/v1/users": {
             "get": {
                 "produces": [
                     "application/json"
                 ],
                 "tags": [
-                    "用户"
+                    "管理员"
                 ],
-                "summary": "用户列表",
+                "summary": "管理员列表",
+                "parameters": [
+                    {
+                        "minimum": 1,
+                        "type": "integer",
+                        "name": "page",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "maximum": 100,
+                        "minimum": 1,
+                        "type": "integer",
+                        "name": "pageSize",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "搜索",
+                        "name": "query",
+                        "in": "query"
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "type": "array",
-                            "items": {
-                                "$ref": "#/definitions/userdto.UserPublicDTO"
-                            }
+                            "$ref": "#/definitions/managerdto.PageResponse"
+                        }
+                    }
+                }
+            },
+            "put": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "管理员"
+                ],
+                "summary": "更新用户",
+                "parameters": [
+                    {
+                        "description": "更新参数",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/managerdto.UpdateRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "No Content",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "管理员"
+                ],
+                "summary": "管理员创建",
+                "parameters": [
+                    {
+                        "description": "创建参数",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/managerdto.CreateRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "No Content",
+                        "schema": {
+                            "type": "string"
                         }
                     }
                 }
             }
         },
-        "/users/list": {
-            "get": {
+        "/api/private/v1/users/{id}": {
+            "delete": {
                 "produces": [
                     "application/json"
                 ],
                 "tags": [
-                    "用户"
+                    "管理员"
                 ],
-                "summary": "用户列表 分页",
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/v1.PageResponse"
-                        }
-                    }
-                }
-            }
-        },
-        "/users/{id}": {
-            "get": {
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "用户"
-                ],
-                "summary": "获取用户详情",
+                "summary": "删除用户",
                 "parameters": [
                     {
                         "type": "integer",
@@ -215,9 +763,75 @@
                 ],
                 "responses": {
                     "200": {
+                        "description": "No Content",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/categories/:id/attributes": {
+            "get": {
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "分类属性"
+                ],
+                "summary": "分类参数列表",
+                "parameters": [
+                    {
+                        "enum": [
+                            "only",
+                            "many"
+                        ],
+                        "type": "string",
+                        "x-enum-varnames": [
+                            "AttrSelOnly",
+                            "AttrSelMany"
+                        ],
+                        "description": "属性录入方式",
+                        "name": "sel",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/userdto.UserPublicDTO"
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/attributedto.PublicDTO"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/categories/:id/attributes/{id}": {
+            "delete": {
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "分类属性"
+                ],
+                "summary": "分类参数删除",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "No Content",
+                        "schema": {
+                            "type": "string"
                         }
                     }
                 }
@@ -225,7 +839,537 @@
         }
     },
     "definitions": {
-        "userdto.LoginRequest": {
+        "attributedto.CreateRequest": {
+            "type": "object",
+            "required": [
+                "attr_name",
+                "attr_sel"
+            ],
+            "properties": {
+                "attr_name": {
+                    "description": "属性名称",
+                    "type": "string"
+                },
+                "attr_sel": {
+                    "description": "属性录入方式",
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/model.AttrSel"
+                        }
+                    ]
+                }
+            }
+        },
+        "attributedto.PublicDTO": {
+            "type": "object",
+            "properties": {
+                "attr_id": {
+                    "description": "属性id",
+                    "type": "integer"
+                },
+                "attr_name": {
+                    "description": "属性名称",
+                    "type": "string"
+                },
+                "attr_sel": {
+                    "description": "属性录入方式",
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/model.AttrSel"
+                        }
+                    ]
+                },
+                "attr_vals": {
+                    "description": "可选值",
+                    "type": "string"
+                },
+                "attr_write": {
+                    "description": "属性录入方式",
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/model.AttrWrite"
+                        }
+                    ]
+                },
+                "cat_id": {
+                    "description": "分类id",
+                    "type": "integer"
+                }
+            }
+        },
+        "attributedto.UpdateRequest": {
+            "type": "object",
+            "required": [
+                "attr_name",
+                "attr_sel"
+            ],
+            "properties": {
+                "attr_name": {
+                    "description": "属性名称",
+                    "type": "string"
+                },
+                "attr_sel": {
+                    "description": "属性录入方式",
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/model.AttrSel"
+                        }
+                    ]
+                },
+                "attr_vals": {
+                    "type": "string"
+                }
+            }
+        },
+        "category.CategoryType": {
+            "type": "string",
+            "enum": [
+                "1",
+                "2",
+                "3"
+            ],
+            "x-enum-varnames": [
+                "CategoryTypeLevel1",
+                "CategoryTypeLevel2",
+                "CategoryTypeLevel3"
+            ]
+        },
+        "category.CreateRequest": {
+            "type": "object",
+            "required": [
+                "cat_name"
+            ],
+            "properties": {
+                "cat_level": {
+                    "description": "分类层级",
+                    "type": "integer"
+                },
+                "cat_name": {
+                    "description": "分类名称",
+                    "type": "string"
+                },
+                "cat_pid": {
+                    "description": "父ID",
+                    "type": "integer"
+                }
+            }
+        },
+        "category.PrivateDTO": {
+            "type": "object"
+        },
+        "category.PublicDTO": {
+            "type": "object",
+            "properties": {
+                "cat_deleted": {
+                    "description": "是否删除",
+                    "type": "boolean"
+                },
+                "cat_id": {
+                    "description": "分类ID",
+                    "type": "integer"
+                },
+                "cat_level": {
+                    "description": "分类层级",
+                    "type": "integer"
+                },
+                "cat_name": {
+                    "description": "分类名称",
+                    "type": "string"
+                },
+                "cat_pid": {
+                    "description": "父ID",
+                    "type": "integer"
+                },
+                "children": {
+                    "description": "omitempty：如果字段是“空值”，就不返回",
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/category.PublicDTO"
+                    }
+                }
+            }
+        },
+        "category.UpdateRequest": {
+            "type": "object",
+            "properties": {
+                "cat_name": {
+                    "description": "分类名称",
+                    "type": "string"
+                }
+            }
+        },
+        "goodsdto.AttrDTO": {
+            "type": "object",
+            "properties": {
+                "add_price": {
+                    "description": "该属性需要额外增加的价钱",
+                    "type": "number"
+                },
+                "attr_id": {
+                    "description": "属性id",
+                    "type": "integer"
+                },
+                "attr_value": {
+                    "description": "商品对应属性的值",
+                    "type": "string"
+                },
+                "goods_id": {
+                    "description": "商品id",
+                    "type": "integer"
+                },
+                "id": {
+                    "description": "主键",
+                    "type": "integer"
+                }
+            }
+        },
+        "goodsdto.CreateAttr": {
+            "type": "object",
+            "required": [
+                "attr_id",
+                "attr_value"
+            ],
+            "properties": {
+                "attr_id": {
+                    "type": "integer"
+                },
+                "attr_value": {
+                    "type": "string"
+                }
+            }
+        },
+        "goodsdto.CreatePics": {
+            "type": "object",
+            "required": [
+                "pic",
+                "url"
+            ],
+            "properties": {
+                "pic": {
+                    "type": "string"
+                },
+                "url": {
+                    "type": "string"
+                }
+            }
+        },
+        "goodsdto.CreateRequest": {
+            "type": "object",
+            "required": [
+                "attrs",
+                "goods_cat",
+                "goods_introduce",
+                "goods_name",
+                "goods_number",
+                "goods_price",
+                "goods_weight",
+                "pics"
+            ],
+            "properties": {
+                "attrs": {
+                    "description": "商品属性",
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/goodsdto.CreateAttr"
+                    }
+                },
+                "goods_cat": {
+                    "description": "商品分类",
+                    "type": "string"
+                },
+                "goods_introduce": {
+                    "description": "商品介绍",
+                    "type": "string"
+                },
+                "goods_name": {
+                    "description": "gorm.Model",
+                    "type": "string"
+                },
+                "goods_number": {
+                    "description": "商品数量",
+                    "type": "integer"
+                },
+                "goods_price": {
+                    "description": "商品价格",
+                    "type": "number"
+                },
+                "goods_weight": {
+                    "description": "商品重量",
+                    "type": "integer"
+                },
+                "pics": {
+                    "description": "商品图片",
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/goodsdto.CreatePics"
+                    }
+                }
+            }
+        },
+        "goodsdto.DetailPublicDTO": {
+            "type": "object",
+            "properties": {
+                "add_time": {
+                    "description": "添加时间s",
+                    "type": "integer"
+                },
+                "attrs": {
+                    "description": "商品属性",
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/goodsdto.AttrDTO"
+                    }
+                },
+                "cat_id": {
+                    "description": "商品分类",
+                    "type": "integer"
+                },
+                "cat_one_id": {
+                    "description": "商品分类",
+                    "type": "integer"
+                },
+                "cat_three_id": {
+                    "description": "商品分类",
+                    "type": "integer"
+                },
+                "cat_two_id": {
+                    "description": "商品分类",
+                    "type": "integer"
+                },
+                "goods_big_logo": {
+                    "description": "商品大图",
+                    "type": "string"
+                },
+                "goods_cat": {
+                    "description": "商品分类",
+                    "type": "string"
+                },
+                "goods_id": {
+                    "description": "主键",
+                    "type": "integer"
+                },
+                "goods_introduce": {
+                    "description": "商品介绍",
+                    "type": "string"
+                },
+                "goods_name": {
+                    "description": "商品名称",
+                    "type": "string"
+                },
+                "goods_number": {
+                    "description": "商品数量",
+                    "type": "integer"
+                },
+                "goods_price": {
+                    "description": "商品价格",
+                    "type": "number"
+                },
+                "goods_small_logo": {
+                    "description": "商品小图",
+                    "type": "string"
+                },
+                "goods_state": {
+                    "description": "商品状态",
+                    "type": "integer"
+                },
+                "goods_weight": {
+                    "description": "商品重量",
+                    "type": "integer"
+                },
+                "is_promote": {
+                    "description": "是否促销",
+                    "type": "integer"
+                },
+                "pics": {
+                    "description": "商品图片",
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/goodsdto.PicDTO"
+                    }
+                },
+                "upd_time": {
+                    "description": "更新时间",
+                    "type": "integer"
+                }
+            }
+        },
+        "goodsdto.PageResponse": {
+            "type": "object",
+            "properties": {
+                "data": {
+                    "description": "列表",
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/goodsdto.PublicDTO"
+                    }
+                },
+                "page": {
+                    "description": "页码",
+                    "type": "integer"
+                },
+                "pageSize": {
+                    "description": "条数",
+                    "type": "integer"
+                },
+                "total": {
+                    "description": "总数",
+                    "type": "integer"
+                }
+            }
+        },
+        "goodsdto.PicDTO": {
+            "type": "object",
+            "properties": {
+                "goods_id": {
+                    "description": "商品id",
+                    "type": "integer"
+                },
+                "pics_big_url": {
+                    "description": "相册大图",
+                    "type": "string"
+                },
+                "pics_id": {
+                    "description": "主键",
+                    "type": "integer"
+                },
+                "pics_mid_url": {
+                    "description": "相册中图",
+                    "type": "string"
+                },
+                "pics_sma_url": {
+                    "description": "相册小图s",
+                    "type": "string"
+                }
+            }
+        },
+        "goodsdto.PublicDTO": {
+            "type": "object",
+            "properties": {
+                "add_time": {
+                    "description": "添加时间s",
+                    "type": "integer"
+                },
+                "goods_id": {
+                    "description": "主键",
+                    "type": "integer"
+                },
+                "goods_name": {
+                    "description": "商品名称",
+                    "type": "string"
+                },
+                "goods_number": {
+                    "description": "商品数量",
+                    "type": "integer"
+                },
+                "goods_price": {
+                    "description": "商品价格",
+                    "type": "number"
+                },
+                "goods_state": {
+                    "description": "商品状态",
+                    "type": "integer"
+                },
+                "goods_weight": {
+                    "description": "商品重量",
+                    "type": "integer"
+                },
+                "is_promote": {
+                    "description": "是否促销",
+                    "type": "integer"
+                }
+            }
+        },
+        "goodsdto.Sort": {
+            "type": "string",
+            "enum": [
+                "asc",
+                "desc"
+            ],
+            "x-enum-varnames": [
+                "SortAsc",
+                "SortDesc"
+            ]
+        },
+        "goodsdto.UpdateRequest": {
+            "type": "object",
+            "required": [
+                "attrs",
+                "goods_cat",
+                "goods_introduce",
+                "goods_name",
+                "goods_number",
+                "goods_price",
+                "goods_weight",
+                "pics"
+            ],
+            "properties": {
+                "attrs": {
+                    "description": "商品属性",
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/goodsdto.CreateAttr"
+                    }
+                },
+                "goods_cat": {
+                    "description": "商品分类",
+                    "type": "string"
+                },
+                "goods_introduce": {
+                    "description": "商品介绍",
+                    "type": "string"
+                },
+                "goods_name": {
+                    "description": "gorm.Model",
+                    "type": "string"
+                },
+                "goods_number": {
+                    "description": "商品数量",
+                    "type": "integer"
+                },
+                "goods_price": {
+                    "description": "商品价格",
+                    "type": "number"
+                },
+                "goods_weight": {
+                    "description": "商品重量",
+                    "type": "integer"
+                },
+                "pics": {
+                    "description": "商品图片",
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/goodsdto.CreatePics"
+                    }
+                }
+            }
+        },
+        "managerdto.CreateRequest": {
+            "type": "object",
+            "required": [
+                "email",
+                "mobile",
+                "password",
+                "username"
+            ],
+            "properties": {
+                "email": {
+                    "description": "邮箱",
+                    "type": "string"
+                },
+                "mobile": {
+                    "description": "手机号",
+                    "type": "string"
+                },
+                "password": {
+                    "type": "string"
+                },
+                "username": {
+                    "description": "用户名",
+                    "type": "string"
+                }
+            }
+        },
+        "managerdto.LoginRequest": {
             "type": "object",
             "required": [
                 "password",
@@ -236,78 +1380,286 @@
                     "type": "string"
                 },
                 "username": {
+                    "description": "用户名",
                     "type": "string"
                 }
             }
         },
-        "userdto.LoginResponse": {
+        "managerdto.LoginResponse": {
             "type": "object",
             "properties": {
+                "email": {
+                    "description": "邮箱",
+                    "type": "string"
+                },
+                "id": {
+                    "description": "ID",
+                    "type": "integer"
+                },
+                "mg_state": {
+                    "description": "状态",
+                    "type": "boolean"
+                },
+                "mobile": {
+                    "description": "手机号",
+                    "type": "string"
+                },
+                "role_id": {
+                    "description": "角色id",
+                    "type": "integer"
+                },
+                "role_name": {
+                    "description": "角色",
+                    "type": "string"
+                },
                 "token": {
                     "type": "string"
                 },
-                "user": {
-                    "$ref": "#/definitions/userdto.UserPrivateDTO"
-                }
-            }
-        },
-        "userdto.UserPrivateDTO": {
-            "type": "object",
-            "properties": {
-                "avatar": {
-                    "type": "string"
-                },
-                "email": {
-                    "type": "string"
-                },
-                "id": {
-                    "type": "integer"
-                },
-                "phone": {
-                    "type": "string"
-                },
                 "username": {
+                    "description": "用户名",
                     "type": "string"
                 }
             }
         },
-        "userdto.UserPublicDTO": {
+        "managerdto.ManagerPublicDTO": {
             "type": "object",
             "properties": {
-                "avatar": {
-                    "type": "string"
-                },
                 "id": {
+                    "description": "ID",
                     "type": "integer"
                 },
                 "username": {
+                    "description": "用户名",
                     "type": "string"
                 }
             }
         },
-        "userdto.UserUpdateRequest": {
+        "managerdto.PageResponse": {
             "type": "object",
             "properties": {
-                "avatar": {
-                    "type": "string"
+                "data": {
+                    "description": "列表",
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/managerdto.ManagerPublicDTO"
+                    }
                 },
-                "username": {
-                    "type": "string"
-                }
-            }
-        },
-        "v1.PageResponse": {
-            "type": "object",
-            "properties": {
-                "data": {},
                 "page": {
+                    "description": "页码",
                     "type": "integer"
                 },
                 "pageSize": {
+                    "description": "条数",
                     "type": "integer"
                 },
                 "total": {
+                    "description": "总数",
                     "type": "integer"
+                }
+            }
+        },
+        "managerdto.UpdateRequest": {
+            "type": "object",
+            "properties": {
+                "email": {
+                    "description": "邮箱",
+                    "type": "string"
+                },
+                "mobile": {
+                    "description": "手机号",
+                    "type": "string"
+                },
+                "state": {
+                    "description": "状态",
+                    "type": "boolean"
+                }
+            }
+        },
+        "model.AttrSel": {
+            "type": "string",
+            "enum": [
+                "only",
+                "many"
+            ],
+            "x-enum-varnames": [
+                "AttrSelOnly",
+                "AttrSelMany"
+            ]
+        },
+        "model.AttrWrite": {
+            "type": "string",
+            "enum": [
+                "manual",
+                "list"
+            ],
+            "x-enum-varnames": [
+                "AttrWriteManual",
+                "AttrWriteList"
+            ]
+        },
+        "model.IsSend": {
+            "type": "string",
+            "enum": [
+                "是",
+                "否"
+            ],
+            "x-enum-varnames": [
+                "IsSendYes",
+                "IsSendNo"
+            ]
+        },
+        "model.OrderPay": {
+            "type": "string",
+            "enum": [
+                "0",
+                "1",
+                "2",
+                "3"
+            ],
+            "x-enum-varnames": [
+                "OrderPayUnpaid",
+                "OrderPayAlipay",
+                "OrderPayWechat",
+                "OrderPayBankCard"
+            ]
+        },
+        "model.PayStatus": {
+            "type": "string",
+            "enum": [
+                "0",
+                "1"
+            ],
+            "x-enum-varnames": [
+                "PayStatusUnpaid",
+                "PayStatusPaid"
+            ]
+        },
+        "orderdto.PageResponse": {
+            "type": "object",
+            "properties": {
+                "data": {
+                    "description": "列表",
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/orderdto.PublicDTO"
+                    }
+                },
+                "page": {
+                    "description": "页码",
+                    "type": "integer"
+                },
+                "pageSize": {
+                    "description": "条数",
+                    "type": "integer"
+                },
+                "total": {
+                    "description": "总数",
+                    "type": "integer"
+                }
+            }
+        },
+        "orderdto.PublicDTO": {
+            "type": "object",
+            "properties": {
+                "consignee_addr": {
+                    "description": "收货地址",
+                    "type": "string"
+                },
+                "create_time": {
+                    "description": "创建时间",
+                    "type": "integer"
+                },
+                "is_send": {
+                    "description": "是否发货",
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/model.IsSend"
+                        }
+                    ]
+                },
+                "order_fapiao_company": {
+                    "description": "发票公司",
+                    "type": "string"
+                },
+                "order_fapiao_content": {
+                    "description": "发票内容",
+                    "type": "string"
+                },
+                "order_fapiao_title": {
+                    "description": "发票抬头",
+                    "type": "string"
+                },
+                "order_id": {
+                    "description": "订单id",
+                    "type": "integer"
+                },
+                "order_number": {
+                    "description": "订单号",
+                    "type": "string"
+                },
+                "order_pay": {
+                    "description": "支付方式",
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/model.OrderPay"
+                        }
+                    ]
+                },
+                "order_price": {
+                    "description": "订单价格",
+                    "type": "number"
+                },
+                "pay_status": {
+                    "description": "支付状态",
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/model.PayStatus"
+                        }
+                    ]
+                },
+                "trade_no": {
+                    "description": "交易号",
+                    "type": "string"
+                },
+                "update_time": {
+                    "description": "更新时间",
+                    "type": "integer"
+                },
+                "user_id": {
+                    "description": "用户id",
+                    "type": "integer"
+                }
+            }
+        },
+        "roledto.LoginRequest": {
+            "type": "object",
+            "required": [
+                "roleDesc",
+                "roleName"
+            ],
+            "properties": {
+                "roleDesc": {
+                    "type": "string"
+                },
+                "roleName": {
+                    "type": "string"
+                }
+            }
+        },
+        "roledto.RolePublicDTO": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "description": "角色ID",
+                    "type": "integer"
+                },
+                "roleDesc": {
+                    "description": "角色描述",
+                    "type": "string"
+                },
+                "roleName": {
+                    "description": "角色名称",
+                    "type": "string"
                 }
             }
         }

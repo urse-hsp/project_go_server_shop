@@ -9,8 +9,8 @@ type LoginRequest struct {
 // ================= 响应 DTO =================
 
 type RolePublicDTO struct {
-	ID       uint   `json:"id"`
-	RoleName string `json:"roleName"`
-	RoleDesc string `json:"roleDesc"`
-	children []any
+	ID       uint   `json:"id"`       // 角色ID
+	RoleName string `json:"roleName"` // 角色名称
+	RoleDesc string `json:"roleDesc"` // 角色描述
+	children []any  // 子级
 }

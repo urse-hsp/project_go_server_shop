@@ -48,7 +48,7 @@ func (u *roleController) Create(c *gin.Context) {
 
 // ================= 删除 =================
 
-// @Summary 删除用户
+// @Summary 删除
 // @Tags 角色
 // @Produce json
 // @Param id path int true "用户ID"
@@ -75,8 +75,8 @@ func (u *roleController) Delete(c *gin.Context) {
 // @Accept json
 // @Produce json
 // @Param data body roledto.LoginRequest true "更新参数"
-// @Success 200 {object} userdto.UserPrivateDTO
-// @Router /api/private/v1/roles/info [put]
+// @Success 200 {object} roledto.RolePublicDTO
+// @Router /api/private/v1/roles/{id} [put]
 func (u *roleController) Update(c *gin.Context) {
 	id, ok := GetUintID(c, "id")
 	if !ok {
@@ -104,8 +104,9 @@ func (u *roleController) Update(c *gin.Context) {
 // @Tags 角色
 // @Produce json
 // @Param id path int true "用户ID"
-// @Success 200 {object} userdto.UserPublicDTO
+// @Success 200 {object} roledto.RolePublicDTO
 // @Router /api/private/v1/roles/{id} [get]
+
 func (u *roleController) GetDetail(c *gin.Context) {
 	id, ok := GetUintID(c, "id")
 	if !ok {
@@ -145,7 +146,8 @@ func (u *roleController) GetList(c *gin.Context) {
 // @Tags 角色
 // @Produce json
 // @Success 200 {object} v1.PageResponse
-// @Router /api/private/v1/roles/lists [get]
+// @Router /api/private/v1/roles [get]
+
 func (u *roleController) GetLists(c *gin.Context) {
 	page, pageSize := v1.GetPage(c)
 

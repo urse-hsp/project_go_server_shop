@@ -17,9 +17,6 @@ func InitGoodsAttrRouter(deps RouterDeps, r *gin.RouterGroup) {
 	Controller := controller.NewAttributeController(deps.Handler, Service) // controller
 
 	noAuthRouter := r.Group("/:id/attributes")
-	// ✅ 不需要登录
-	{
-	}
 	// ✅ 需要登录
 	strictAuthRouter := noAuthRouter.Group("").Use(middleware.StrictAuth(deps.JWT, deps.Logger))
 	{
@@ -28,9 +25,4 @@ func InitGoodsAttrRouter(deps RouterDeps, r *gin.RouterGroup) {
 		strictAuthRouter.PUT("/:attrId", Controller.Update)    // edit
 		strictAuthRouter.DELETE("/:attrId", Controller.Delete) // delete
 	}
-	// // ✅ 不强制登录
-	// noStrictAuth := noAuthRouter.Group("").Use(middleware.NoStrictAuth(deps.JWT, deps.Logger))
-	// {
-	// 	noStrictAuth.GET("/lists", Controller.GetPageList) // 分页列表
-	// }
 }

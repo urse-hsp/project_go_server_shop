@@ -83,7 +83,7 @@ func (u *managerController) Create(c *gin.Context) {
 // @Produce json
 // @Param id path int true "用户ID"
 // @Success 200 {string} string "No Content"
-// @Router /api/private/v1/users/:id [delete]
+// @Router /api/private/v1/users/{id} [delete]
 func (u *managerController) Delete(c *gin.Context) {
 	id, ok := GetUintID(c, "id")
 	if !ok {
@@ -96,6 +96,7 @@ func (u *managerController) Delete(c *gin.Context) {
 	// 	v1.Forbidden(c, "无权限删除他人")
 	// 	return
 	// }
+
 	if err := u.managerService.Delete(c, uint(id)); err != nil {
 		v1.BadRequest(c, err.Error())
 		return
@@ -104,9 +105,9 @@ func (u *managerController) Delete(c *gin.Context) {
 	v1.Success(c, true)
 }
 
-// ================= 更新当前用户 =================
+// ================= 更新用户 =================
 
-// @Summary 更新当前用户
+// @Summary 更新用户
 // @Tags 管理员
 // @Accept json
 // @Produce json
@@ -154,7 +155,7 @@ func (u *managerController) Update(c *gin.Context) {
 // @Tags 管理员
 // @Produce json
 // @Param data query managerdto.ManagerQuery false "查询参数"
-// @Success 200 {object} v1.PageResponse
+// @Success 200 {object} managerdto.PageResponse
 // @Router /api/private/v1/users [get]
 func (c *managerController) GetLists(ctx *gin.Context) {
 	var q managerdto.ManagerQuery

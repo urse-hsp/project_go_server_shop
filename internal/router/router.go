@@ -48,6 +48,7 @@ func SetupRouter(deps RouterDeps) *gin.Engine {
 
 	// ================= 管理员模块 =================
 	InitManagerRouter(deps, v1)
+
 	// ================= 角色模块 =================
 	InitRoleRouter(deps, v1)
 
@@ -60,12 +61,13 @@ func SetupRouter(deps RouterDeps) *gin.Engine {
 	// ================= 类别模块 =================
 	categoryR := InitCategoryRouter(deps, v1)
 
-	// ================= 分类参数模块 =================
+	// ================= 分类属性模块 =================
 	InitGoodsAttrRouter(deps, categoryR)
 
 	// ================= 订单模块 =================
 	InitOrderRouter(deps, v1)
 
+	// ================= 上传模块 =================
 	InitUploadRouter(deps, v1)
 
 	return r

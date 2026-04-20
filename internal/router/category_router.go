@@ -10,16 +10,13 @@ import (
 )
 
 func InitCategoryRouter(deps RouterDeps, r *gin.RouterGroup) *gin.RouterGroup {
-	// ================= 分类模块 =================
+	// ================= 商品分类模块 =================
 	// 初始化依赖
 	Repository := dao.NewCategoryRepository(deps.Repository)              // dao
 	Service := service.NewCategoryCatsService(deps.Service, Repository)   // service
 	Controller := controller.NewCategoryController(deps.Handler, Service) // controller
 
 	noAuthRouter := r.Group("/categories")
-	// ✅ 不需要登录
-	{
-	}
 	// ✅ 需要登录
 	strictAuthRouter := noAuthRouter.Group("").Use(middleware.StrictAuth(deps.JWT, deps.Logger))
 	{
@@ -27,14 +24,8 @@ func InitCategoryRouter(deps RouterDeps, r *gin.RouterGroup) *gin.RouterGroup {
 		strictAuthRouter.GET("", Controller.GetList)       // get
 		strictAuthRouter.PUT("/:id", Controller.Update)    // edit
 		strictAuthRouter.DELETE("/:id", Controller.Delete) // delete
-		strictAuthRouter.GET("/:id", Controller.GetDetail) // detail
+		// strictAuthRouter.GET("/:id", Controller.GetDetail) // detail
 	}
-	// // ✅ 不强制登录
-	// noStrictAuth := noAuthRouter.Group("").Use(middleware.NoStrictAuth(deps.JWT, deps.Logger))
-	// {
-	// 	noStrictAuth.GET("/lists", Controller.GetPageList) // 分页列表
-	// }
 
-	// return noAuthRouter
 	return noAuthRouter
 }

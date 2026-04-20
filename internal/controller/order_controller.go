@@ -23,12 +23,12 @@ type orderController struct {
 // ================= 创建 =================
 
 // @Summary 订单创建
-// @Tags DEMO
+// @Tags 订单
 // @Accept json
 // @Produce json
 // @Param data body orderdto.CreateRequest true "注册参数"
-// @Success 201 {object} orderdto.UserPrivateDTO
-// @Router /demo [post]
+// @Success 201 {object} orderdto.PrivateDTO
+// @Router /api/private/v1/orders [post]
 
 func (u *orderController) Create(c *gin.Context) {
 	var req orderdto.CreateRequest
@@ -50,11 +50,11 @@ func (u *orderController) Create(c *gin.Context) {
 // ================= 删除id信息 =================
 
 // @Summary 订单删除
-// @Tags DEMO
+// @Tags 订单
 // @Produce json
 // @Param id path int true "ID"
 // @Success 204 {string} string "No Content"
-// @Router /demo/{id} [delete]
+// @Router /api/private/v1/orders/{id} [delete]
 
 func (u *orderController) Delete(c *gin.Context) {
 	id, ok := GetUintID(c, "id")
@@ -81,12 +81,12 @@ func (u *orderController) Delete(c *gin.Context) {
 // ================= 更新当前id信息 =================
 
 // @Summary 订单更新
-// @Tags DEMO
+// @Tags 订单
 // @Accept json
 // @Produce json
 // @Param data body orderdto.UpdateRequest true "更新参数"
-// @Success 200 {object} orderdto.UserPrivateDTO
-// @Router /demo [put]
+// @Success 200 {object} orderdto.PrivateDTO
+// @Router /api/private/v1/orders [put]
 
 func (u *orderController) Update(c *gin.Context) {
 	id, idErr := ParseUintParam(c, "id")
@@ -113,42 +113,34 @@ func (u *orderController) Update(c *gin.Context) {
 // ================= 获取id详情 =================
 
 // @Summary 获取详情
-// @Tags DEMO
+// @Tags 订单
 // @Produce json
 // @Param id path int true "ID"
-// @Success 200 {object} orderdto.UserPublicDTO
-// @Router /demo/{id} [get]
-
+// @Success 200 {object} orderdto.PublicDTO
+// @Router /api/private/v1/orders/{id} [get]
 func (u *orderController) GetDetail(c *gin.Context) {
 	id, ok := GetUintID(c, "id")
 	if !ok {
 		return
 	}
 
-	user, err := u.Service.GetDetail(c, uint(id))
+	data, err := u.Service.GetDetail(c, uint(id))
 	if err != nil {
 		v1.BadRequest(c, err.Error())
 		return
 	}
 
-	currentUserID := GetUserIdFromCtx(c)
-
-	// 权限控制：自己 vs 他人
-	if currentUserID == uint(id) {
-		v1.Success(c, orderdto.ToPrivateDTO(user))
-	} else {
-		v1.Success(c, orderdto.ToPublicDTO(user))
-	}
+	v1.Success(c, orderdto.ToPublicDTO(data))
 }
 
 // ================= 列表 =================
 
 // @Summary 订单列表
-// @Tags DEMO
+// @Tags 订单
 // @Produce json
 // @Param data query orderdto.RequestQuery false "查询参数"
-// @Success 200 {object} []orderdto.UserPublicDTO
-// @Router /user [get]
+// @Success 200 {object} []orderdto.PublicDTO
+// @Router /api/private/v1/orders [get]
 
 func (u *orderController) GetList(c *gin.Context) {
 	var q orderdto.RequestQuery
@@ -172,12 +164,11 @@ func (u *orderController) GetList(c *gin.Context) {
 // ================= 分页列表 =================
 
 // @Summary 订单列表-分页
-// @Tags DEMO
+// @Tags 订单
 // @Produce json
 // @Param data query orderdto.RequestPageQuery false "查询参数"
-// @Success 200 {object} v1.PageResponse
-// @Router /demo/lists [get]
-
+// @Success 200 {object} orderdto.PageResponse
+// @Router /api/private/v1/orders/lists [get]
 func (u *orderController) GetPageList(c *gin.Context) {
 	var q orderdto.RequestPageQuery
 

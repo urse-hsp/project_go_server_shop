@@ -22,13 +22,13 @@ type goodsController struct {
 
 // ================= 创建 =================
 
-// @Summary 用户注册
-// @Tags 用户
+// @Summary 注册
+// @Tags 商品
 // @Accept json
 // @Produce json
-// @Param data body goodsdto.LoginRequest true "注册参数"
-// @Success 201 {object} goodsdto.UserPrivateDTO
-// @Router /user/register [post]
+// @Param data body goodsdto.CreateRequest true "注册参数"
+// @Success 201 {object} goodsdto.DetailPublicDTO
+// @Router /api/private/v1/goods [post]
 func (u *goodsController) Create(c *gin.Context) {
 	var req goodsdto.CreateRequest
 
@@ -48,12 +48,12 @@ func (u *goodsController) Create(c *gin.Context) {
 
 // ================= 删除id信息 =================
 
-// @Summary 删除用户
-// @Tags 用户
+// @Summary 删除
+// @Tags 商品
 // @Produce json
-// @Param id path int true "用户ID"
+// @Param id path int true "ID"
 // @Success 204 {string} string "No Content"
-// @Router /user/{id} [delete]
+// @Router /api/private/v1/goods/{id} [delete]
 func (u *goodsController) Delete(c *gin.Context) {
 	id, ok := GetUintID(c, "id")
 	if !ok {
@@ -70,13 +70,13 @@ func (u *goodsController) Delete(c *gin.Context) {
 
 // ================= 更新当前id信息 =================
 
-// @Summary 更新当前用户
-// @Tags 用户
+// @Summary 更新
+// @Tags 商品
 // @Accept json
 // @Produce json
 // @Param data body goodsdto.UpdateRequest true "更新参数"
-// @Success 200 {object} goodsdto.UserPrivateDTO
-// @Router /user/info [put]
+// @Success 200 {object} goodsdto.DetailPublicDTO
+// @Router /api/private/v1/goods/info [put]
 func (u *goodsController) Update(c *gin.Context) {
 	id, ok := GetUintID(c, "id")
 	if !ok {
@@ -101,12 +101,11 @@ func (u *goodsController) Update(c *gin.Context) {
 // ================= 获取id详情 =================
 
 // @Summary 获取详情
-// @Tags DEMO
+// @Tags 商品
 // @Produce json
 // @Param id path int true "ID"
-// @Success 200 {object} demodto.UserPublicDTO
-// @Router /demo/{id} [get]
-
+// @Success 200 {object} goodsdto.DetailPublicDTO
+// @Router /api/private/v1/goods/{id} [get]
 func (u *goodsController) GetDetail(c *gin.Context) {
 	id, ok := GetUintID(c, "id")
 	if !ok {
@@ -124,12 +123,12 @@ func (u *goodsController) GetDetail(c *gin.Context) {
 
 // ================= 分页列表 =================
 
-// @Summary 用户列表 分页
-// @Tags 用户
+// @Summary 列表 分页
+// @Tags 商品
 // @Produce json
-// @Param data query goodsdto.RequestQuery false "查询参数"
-// @Success 200 {object} v1.PageResponse
-// @Router /user/lists [get]
+// @Param data query goodsdto.RequestPageQuery false "查询参数"
+// @Success 200 {object} goodsdto.PageResponse
+// @Router /api/private/v1/goods [get]
 func (u *goodsController) GetLists(c *gin.Context) {
 	var q goodsdto.RequestPageQuery
 	if err := c.ShouldBindQuery(&q); err != nil {

@@ -23,12 +23,12 @@ type categoryController struct {
 // ================= 创建 =================
 
 // @Summary 商品分类创建
-// @Tags DEMO
+// @Tags 商品分类
 // @Accept json
 // @Produce json
 // @Param data body category.CreateRequest true "注册参数"
-// @Success 201 {object} category.UserPrivateDTO
-// @Router /category [post]
+// @Success 201 {object} category.PrivateDTO
+// @Router /api/private/v1/categories [post]
 func (u *categoryController) Create(c *gin.Context) {
 	var req category.CreateRequest
 
@@ -49,11 +49,11 @@ func (u *categoryController) Create(c *gin.Context) {
 // ================= 删除id信息 =================
 
 // @Summary 商品分类删除
-// @Tags DEMO
+// @Tags 商品分类
 // @Produce json
 // @Param id path int true "ID"
 // @Success 204 {string} string "No Content"
-// @Router /category/{id} [delete]
+// @Router /api/private/v1/categories/{id} [delete]
 func (u *categoryController) Delete(c *gin.Context) {
 	id, ok := GetUintID(c, "id")
 	if !ok {
@@ -71,12 +71,12 @@ func (u *categoryController) Delete(c *gin.Context) {
 // ================= 更新当前id信息 =================
 
 // @Summary 商品分类更新
-// @Tags DEMO
+// @Tags 商品分类
 // @Accept json
 // @Produce json
 // @Param data body category.UpdateRequest true "更新参数"
-// @Success 200 {object} category.UserPrivateDTO
-// @Router /category [put]
+// @Success 200 {object} category.PrivateDTO
+// @Router /api/private/v1/categories [put]
 func (u *categoryController) Update(c *gin.Context) {
 	id, ok := GetUintID(c, "id")
 	if !ok {
@@ -101,11 +101,12 @@ func (u *categoryController) Update(c *gin.Context) {
 // ================= 获取id详情 =================
 
 // @Summary 获取详情
-// @Tags DEMO
+// @Tags 商品分类
 // @Produce json
 // @Param id path int true "ID"
-// @Success 200 {object} category.UserPublicDTO
-// @Router /category/{id} [get]
+// @Success 200 {object} category.ToPublicDTO
+// @Router /api/private/v1/categories/{id} [get]
+
 func (u *categoryController) GetDetail(c *gin.Context) {
 	id, ok := GetUintID(c, "id")
 	if !ok {
@@ -131,11 +132,11 @@ func (u *categoryController) GetDetail(c *gin.Context) {
 // ================= 列表 =================
 
 // @Summary 商品分类列表
-// @Tags DEMO
+// @Tags 商品分类
 // @Produce json
 // @Param data query category.RequestQuery false "查询参数"
-// @Success 200 {object} []category.UserPublicDTO
-// @Router /user [get]
+// @Success 200 {object} []category.PublicDTO
+// @Router  /api/private/v1/categories [get]
 func (u *categoryController) GetList(c *gin.Context) {
 	var q category.RequestQuery
 
@@ -163,11 +164,12 @@ func (u *categoryController) GetList(c *gin.Context) {
 // ================= 分页列表 =================
 
 // @Summary 商品分类列表-分页
-// @Tags DEMO
+// @Tags 商品分类
 // @Produce json
 // @Param data query category.RequestPageQuery false "查询参数"
 // @Success 200 {object} v1.PageResponse
-// @Router /category/lists [get]
+// @Router /api/private/v1/categories/lists [get]
+
 func (u *categoryController) GetPageList(c *gin.Context) {
 	var q category.RequestPageQuery
 
