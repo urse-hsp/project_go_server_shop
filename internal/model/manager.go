@@ -4,7 +4,7 @@ package model
 
 type Manager struct {
 	MgID     uint   `gorm:"primaryKey;autoIncrement;comment:主键"`
-	MgName   string `gorm:"type:varchar(32);not null;comment:名称"`
+	MgName   string `gorm:"type:varchar(32);not null;comment:管理员名称"`
 	MgPwd    string `gorm:"type:char(64);not null;comment:密码"`
 	MgTime   int    `gorm:"not null;comment:注册时间"`
 	RoleID   uint   `gorm:"not null;default:0;comment:角色id"`

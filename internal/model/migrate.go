@@ -3,7 +3,7 @@ package model
 
 func GetModels() []interface{} {
 	return []interface{}{
-		&User{},
+		&Manager{},
 		&UserCart{},
 		&Type{},
 		&Role{},
@@ -14,7 +14,6 @@ func GetModels() []interface{} {
 		&permissionApi{},
 		&orderGoods{},
 		&Order{},
-		&Manager{},
 		&Goods{},
 		&GoodsPics{},
 		&GoodsCats{},

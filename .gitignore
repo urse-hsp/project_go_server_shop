@@ -12,7 +12,7 @@ Thumbs.db
 tmp/ 
 bin/
 # dist/
-build/
+# build/
 *.exe
 *.out
 *.test

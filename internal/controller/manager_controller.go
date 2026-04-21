@@ -113,7 +113,7 @@ func (u *managerController) Delete(c *gin.Context) {
 // @Produce json
 // @Param data body managerdto.UpdateRequest true "更新参数"
 // @Success 200 {object} string "No Content"
-// @Router /api/private/v1/users [put]
+// @Router /api/private/v1/users/{id} [put]
 func (u *managerController) Update(c *gin.Context) {
 	id, idErr := ParseUintParam(c, "id")
 	if idErr != nil {
@@ -130,15 +130,6 @@ func (u *managerController) Update(c *gin.Context) {
 		v1.BadRequest(c, "至少需要传一个更新字段")
 		return
 	}
-	// if req.Email != nil && *req.Email == "" {
-	// 	v1.BadRequest(c, "email不能为空")
-	// 	return
-	// }
-
-	// if req.Mobile != nil && *req.Mobile == "" {
-	// 	v1.BadRequest(c, "mobile不能为空")
-	// 	return
-	// }
 
 	_, err := u.managerService.Update(c, id, req)
 	if err != nil {
@@ -160,7 +151,7 @@ func (u *managerController) Update(c *gin.Context) {
 func (c *managerController) GetLists(ctx *gin.Context) {
 	var q managerdto.ManagerQuery
 	if err := ctx.ShouldBindQuery(&q); err != nil {
-		v1.BadRequest(ctx, "参数错误")
+		v1.BadRequest(ctx, "参数错误"+err.Error())
 		return
 	}
 	q.Normalize()

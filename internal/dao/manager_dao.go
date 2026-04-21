@@ -59,6 +59,7 @@ func (r *managerRepository) Create(ctx context.Context, user *model.Manager) (*m
 func (r *managerRepository) Update(ctx context.Context, user *model.Manager, id uint) (*model.Manager, error) {
 	if err := r.DB(ctx).
 		Model(&model.Manager{}).
+		Select("MgState"). // Select 强制更新字段
 		Where("mg_id = ?", id).
 		Updates(user).Error; err != nil {
 		return nil, err

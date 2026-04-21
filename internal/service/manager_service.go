@@ -104,7 +104,7 @@ func (s *managerService) Update(ctx context.Context, id uint, req managerdto.Upd
 	AssignIfNotNil(&data.MgEmail, req.Email)
 
 	if req.State != nil {
-		if *req.State {
+		if *req.State == true {
 			data.MgState = 1
 		} else {
 			data.MgState = 0

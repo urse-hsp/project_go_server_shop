@@ -1,0 +1,35 @@
+version: '3.9'
+
+services:
+  server:
+    build:
+      context: ../../
+      dockerfile: deploy/build/Dockerfile
+      args:
+        APP_CONF: config/prod.yml
+        APP_RELATIVE_PATH: ./cmd/server
+    image: shop-server:v1
+    ports:
+      - "8080:8080"
+    restart: always
+
+  task:
+    build:
+      context: ../../
+      dockerfile: deploy/build/Dockerfile
+      args:
+        APP_CONF: config/prod.yml
+        APP_RELATIVE_PATH: ./cmd/task
+    image: shop-task:v1
+    restart: always
+
+  # 👇 不常驻
+  migration:
+    build:
+      context: ../../
+      dockerfile: deploy/build/Dockerfile
+      args:
+        APP_CONF: config/prod.yml
+        APP_RELATIVE_PATH: ./cmd/migration
+    image: shop-migration:v1
+
