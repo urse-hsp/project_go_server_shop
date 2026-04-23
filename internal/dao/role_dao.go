@@ -3,7 +3,6 @@ package dao
 import (
 	"context"
 	"fmt"
-	"go-server/internal/bootstrap"
 	"go-server/internal/model"
 )
 
@@ -19,7 +18,7 @@ type RoleRepository interface {
 }
 
 func NewRoleRepository(
-	r *bootstrap.Repository,
+	r *Repository,
 ) RoleRepository {
 	return &roleRepository{
 		Repository: r,
@@ -27,7 +26,7 @@ func NewRoleRepository(
 }
 
 type roleRepository struct {
-	*bootstrap.Repository
+	*Repository
 }
 
 // ================= 根据ID查询 =================

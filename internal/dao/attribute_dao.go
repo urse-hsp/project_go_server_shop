@@ -3,7 +3,6 @@ package dao
 import (
 	"context"
 	"fmt"
-	"go-server/internal/bootstrap"
 	attributedto "go-server/internal/dto/attribute"
 	"go-server/internal/model"
 
@@ -23,7 +22,7 @@ type AttributeRepository interface {
 }
 
 func NewAttributeRepository(
-	r *bootstrap.Repository,
+	r *Repository,
 ) AttributeRepository {
 	return &attributeRepository{
 		Repository: r,
@@ -31,7 +30,7 @@ func NewAttributeRepository(
 }
 
 type attributeRepository struct {
-	*bootstrap.Repository
+	*Repository
 }
 
 // ================= 根据ID查询 =================

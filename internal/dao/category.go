@@ -3,7 +3,6 @@ package dao
 import (
 	"context"
 	"fmt"
-	"go-server/internal/bootstrap"
 	"go-server/internal/dto/category"
 	"go-server/internal/model"
 
@@ -23,7 +22,7 @@ type CategoryRepository interface {
 }
 
 func NewCategoryRepository(
-	r *bootstrap.Repository,
+	r *Repository,
 ) CategoryRepository {
 	return &categoryRepository{
 		Repository: r,
@@ -31,7 +30,7 @@ func NewCategoryRepository(
 }
 
 type categoryRepository struct {
-	*bootstrap.Repository
+	*Repository
 }
 
 // ================= 根据ID查询 =================

@@ -4,7 +4,6 @@ import (
 	"context"
 	"fmt"
 	v1 "go-server/api/v1"
-	"go-server/internal/bootstrap"
 	"go-server/internal/model"
 )
 
@@ -20,7 +19,7 @@ type RightsRepository interface {
 }
 
 func NewRightsRepository(
-	r *bootstrap.Repository,
+	r *Repository,
 ) RightsRepository {
 	return &rightsRepository{
 		Repository: r,
@@ -28,7 +27,7 @@ func NewRightsRepository(
 }
 
 type rightsRepository struct {
-	*bootstrap.Repository
+	*Repository
 }
 
 // ================= 根据ID查询 =================

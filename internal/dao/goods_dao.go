@@ -3,7 +3,6 @@ package dao
 import (
 	"context"
 	"fmt"
-	"go-server/internal/bootstrap"
 	goodsdto "go-server/internal/dto/goods"
 	"go-server/internal/model"
 
@@ -22,7 +21,7 @@ type GoodsRepository interface {
 }
 
 func NewGoodsRepository(
-	r *bootstrap.Repository,
+	r *Repository,
 ) GoodsRepository {
 	return &goodsRepository{
 		Repository: r,
@@ -30,7 +29,7 @@ func NewGoodsRepository(
 }
 
 type goodsRepository struct {
-	*bootstrap.Repository
+	*Repository
 }
 
 // ================= 根据ID查询 =================

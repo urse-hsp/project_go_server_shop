@@ -236,7 +236,8 @@ const docTemplate = `{
                     {
                         "minimum": 1,
                         "type": "integer",
-                        "name": "page",
+                        "description": "页码",
+                        "name": "current",
                         "in": "query",
                         "required": true
                     },
@@ -244,6 +245,7 @@ const docTemplate = `{
                         "maximum": 100,
                         "minimum": 1,
                         "type": "integer",
+                        "description": "条数",
                         "name": "pageSize",
                         "in": "query",
                         "required": true
@@ -443,7 +445,8 @@ const docTemplate = `{
                     {
                         "minimum": 1,
                         "type": "integer",
-                        "name": "page",
+                        "description": "页码",
+                        "name": "current",
                         "in": "query",
                         "required": true
                     },
@@ -451,6 +454,7 @@ const docTemplate = `{
                         "maximum": 100,
                         "minimum": 1,
                         "type": "integer",
+                        "description": "条数",
                         "name": "pageSize",
                         "in": "query",
                         "required": true
@@ -658,7 +662,8 @@ const docTemplate = `{
                     {
                         "minimum": 1,
                         "type": "integer",
-                        "name": "page",
+                        "description": "页码",
+                        "name": "current",
                         "in": "query",
                         "required": true
                     },
@@ -666,6 +671,7 @@ const docTemplate = `{
                         "maximum": 100,
                         "minimum": 1,
                         "type": "integer",
+                        "description": "条数",
                         "name": "pageSize",
                         "in": "query",
                         "required": true
@@ -682,37 +688,6 @@ const docTemplate = `{
                         "description": "OK",
                         "schema": {
                             "$ref": "#/definitions/managerdto.PageResponse"
-                        }
-                    }
-                }
-            },
-            "put": {
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "管理员"
-                ],
-                "summary": "更新用户",
-                "parameters": [
-                    {
-                        "description": "更新参数",
-                        "name": "data",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/managerdto.UpdateRequest"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "No Content",
-                        "schema": {
-                            "type": "string"
                         }
                     }
                 }
@@ -750,6 +725,37 @@ const docTemplate = `{
             }
         },
         "/api/private/v1/users/{id}": {
+            "put": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "管理员"
+                ],
+                "summary": "更新用户",
+                "parameters": [
+                    {
+                        "description": "更新参数",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/managerdto.UpdateRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "No Content",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            },
             "delete": {
                 "produces": [
                     "application/json"
@@ -1201,7 +1207,16 @@ const docTemplate = `{
         },
         "goodsdto.PageResponse": {
             "type": "object",
+            "required": [
+                "current",
+                "pageSize"
+            ],
             "properties": {
+                "current": {
+                    "description": "页码",
+                    "type": "integer",
+                    "minimum": 1
+                },
                 "data": {
                     "description": "列表",
                     "type": "array",
@@ -1209,13 +1224,11 @@ const docTemplate = `{
                         "$ref": "#/definitions/goodsdto.PublicDTO"
                     }
                 },
-                "page": {
-                    "description": "页码",
-                    "type": "integer"
-                },
                 "pageSize": {
                     "description": "条数",
-                    "type": "integer"
+                    "type": "integer",
+                    "maximum": 100,
+                    "minimum": 1
                 },
                 "total": {
                     "description": "总数",
@@ -1367,6 +1380,7 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "password": {
+                    "description": "密码",
                     "type": "string"
                 },
                 "username": {
@@ -1383,6 +1397,7 @@ const docTemplate = `{
             ],
             "properties": {
                 "password": {
+                    "description": "密码",
                     "type": "string"
                 },
                 "username": {
@@ -1442,7 +1457,16 @@ const docTemplate = `{
         },
         "managerdto.PageResponse": {
             "type": "object",
+            "required": [
+                "current",
+                "pageSize"
+            ],
             "properties": {
+                "current": {
+                    "description": "页码",
+                    "type": "integer",
+                    "minimum": 1
+                },
                 "data": {
                     "description": "列表",
                     "type": "array",
@@ -1450,13 +1474,11 @@ const docTemplate = `{
                         "$ref": "#/definitions/managerdto.ManagerPublicDTO"
                     }
                 },
-                "page": {
-                    "description": "页码",
-                    "type": "integer"
-                },
                 "pageSize": {
                     "description": "条数",
-                    "type": "integer"
+                    "type": "integer",
+                    "maximum": 100,
+                    "minimum": 1
                 },
                 "total": {
                     "description": "总数",
@@ -1542,7 +1564,16 @@ const docTemplate = `{
         },
         "orderdto.PageResponse": {
             "type": "object",
+            "required": [
+                "current",
+                "pageSize"
+            ],
             "properties": {
+                "current": {
+                    "description": "页码",
+                    "type": "integer",
+                    "minimum": 1
+                },
                 "data": {
                     "description": "列表",
                     "type": "array",
@@ -1550,13 +1581,11 @@ const docTemplate = `{
                         "$ref": "#/definitions/orderdto.PublicDTO"
                     }
                 },
-                "page": {
-                    "description": "页码",
-                    "type": "integer"
-                },
                 "pageSize": {
                     "description": "条数",
-                    "type": "integer"
+                    "type": "integer",
+                    "maximum": 100,
+                    "minimum": 1
                 },
                 "total": {
                     "description": "总数",

@@ -3,7 +3,6 @@ package dao
 import (
 	"context"
 	"fmt"
-	"go-server/internal/bootstrap"
 	managerdto "go-server/internal/dto/manager"
 	"go-server/internal/model"
 
@@ -20,7 +19,7 @@ type ManagerRepository interface {
 }
 
 func NewManagerRepository(
-	r *bootstrap.Repository,
+	r *Repository,
 ) ManagerRepository {
 	return &managerRepository{
 		Repository: r,
@@ -28,7 +27,7 @@ func NewManagerRepository(
 }
 
 type managerRepository struct {
-	*bootstrap.Repository
+	*Repository
 }
 
 // ================= 根据ID查询 =================

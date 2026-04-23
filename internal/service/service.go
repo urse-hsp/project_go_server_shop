@@ -1,7 +1,7 @@
 package service
 
 import (
-	"go-server/internal/bootstrap"
+	"go-server/internal/dao"
 	"go-server/pkg/jwt"
 	"go-server/pkg/log"
 	"go-server/pkg/sid"
@@ -16,11 +16,11 @@ type Service struct {
 	logger *log.Logger
 	sid    *sid.Sid
 	jwt    *jwt.JWT
-	tm     bootstrap.Transaction
+	tm     dao.Transaction
 }
 
 func NewService(
-	tm bootstrap.Transaction,
+	tm dao.Transaction,
 	logger *log.Logger,
 	sid *sid.Sid,
 	jwt *jwt.JWT,
