@@ -32,7 +32,7 @@ type ManagerQuery struct {
 
 type PageResponse struct {
 	Data []ManagerPublicDTO `json:"data"` // 列表
-	v1.PageSizeResponse
+	v1.PageInfo
 }
 
 // 对外公开（别人能看到）

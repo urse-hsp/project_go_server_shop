@@ -159,5 +159,5 @@ func (u *roleController) GetLists(c *gin.Context) {
 
 	list := roledto.RoleListToPublic(users)
 
-	v1.List(c, list, int(total), page, pageSize)
+	v1.List(c, list, total, page, pageSize)
 }

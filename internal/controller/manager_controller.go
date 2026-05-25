@@ -164,5 +164,5 @@ func (c *managerController) GetLists(ctx *gin.Context) {
 
 	list := managerdto.ManagerListToPublic(users)
 
-	v1.List(ctx, list, int(total), q.Page, q.PageSize)
+	v1.List(ctx, list, total, q.Page, q.PageSize)
 }

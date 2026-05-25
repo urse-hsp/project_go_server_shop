@@ -186,5 +186,5 @@ func (u *categoryController) GetPageList(c *gin.Context) {
 
 	list := category.ListToPublic(users)
 
-	v1.List(c, list, int(total), q.Page, q.PageSize)
+	v1.List(c, list, total, q.Page, q.PageSize)
 }

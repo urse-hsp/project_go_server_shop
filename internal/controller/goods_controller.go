@@ -145,5 +145,5 @@ func (u *goodsController) GetLists(c *gin.Context) {
 
 	list := goodsdto.ListToPublic(users)
 
-	v1.List(c, list, int(total), q.Page, q.PageSize)
+	v1.List(c, list, total, q.Page, q.PageSize)
 }

@@ -41,7 +41,7 @@ type RequestPageQuery struct {
 // ================= 响应 DTO =================
 type PageResponse struct {
 	Data []PublicDTO `json:"data"` // 列表
-	v1.PageSizeResponse
+	v1.PageInfo
 }
 
 // 对外公开（别人能看到）
